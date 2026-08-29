@@ -5,12 +5,13 @@
      1. 색상(hue)을 쓰지 않는다. 순수 무채색 스케일 하나로 위계를 만든다.
      2. 링크는 색이 아니라 밑줄로 구분한다. 본문 링크만 밑줄, 크롬 링크는 없음.
      3. 색은 상태 표시(위험·주의) 전용으로 예약해 둔다. 이 블로그에서는 쓰지 않는다.
+     4. 라이트 모드로 고정한다. 인쇄물·문서와 같은 화면을 유지하기 위해서다.
 
    모든 텍스트 조합은 WCAG AA(4.5:1) 이상입니다.
    ───────────────────────────────────────────── */
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 
   /* Ink scale — 유일한 팔레트 */
   --ink-000: #FFFFFF;
@@ -21,7 +22,7 @@
   --ink-600: #6E6E6E;
   --ink-900: #1A1A1A;
 
-  /* UI 토큰 — Light */
+  /* UI 토큰 */
   --bg:       var(--ink-000);
   --surface:  var(--ink-050);
   --fg:       var(--ink-900);   /* 16.7:1 */
@@ -33,19 +34,6 @@
 
   --max: 46rem;
   --radius: 8px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:       #121212;
-    --surface:  #1A1A1A;
-    --fg:       #E8E8E8;        /* 14.6:1 */
-    --muted:    #9A9A9A;        /*  6.5:1 */
-    --line:     #2E2E2E;
-    --chip:     #202020;
-    --code-bg:  #1C1C1C;
-    --rule:     #555555;
-  }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
