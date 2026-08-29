@@ -1,48 +1,50 @@
 /* ─────────────────────────────────────────────
-   SENO Brand Color System v1.0 적용
+   SENO Monochrome System v2.0
 
-   브랜드 팔레트는 파스텔 위주라 그대로 텍스트에 쓰면
-   대비가 부족합니다. 그래서:
-     · 표면 / 배지 / 강조 → 브랜드 원색 그대로
-     · 본문 / 링크        → 같은 색상 계열의 어두운 파생값
-   모든 텍스트 조합은 WCAG AA (4.5:1) 이상으로 맞췄습니다.
+   원칙 세 가지
+     1. 색상(hue)을 쓰지 않는다. 순수 무채색 스케일 하나로 위계를 만든다.
+     2. 링크는 색이 아니라 밑줄로 구분한다. 본문 링크만 밑줄, 크롬 링크는 없음.
+     3. 색은 상태 표시(위험·주의) 전용으로 예약해 둔다. 이 블로그에서는 쓰지 않는다.
+
+   모든 텍스트 조합은 WCAG AA(4.5:1) 이상입니다.
    ───────────────────────────────────────────── */
 
 :root {
-  /* Brand — 원색 (표면·배지·강조용) */
-  --seno-mist:      #C6D4E8;  /* Mist Blue       */
-  --seno-navy:      #2D3A52;  /* Node Navy       */
-  --seno-sage:      #B8D8C8;  /* Safety Sage     */
-  --seno-lavender:  #D4C8E2;  /* Signal Lavender */
-  --seno-caution:   #E8D8BE;  /* Warm Caution    */
-  --seno-cloud:     #F3F5F8;  /* Cloud           */
-  --seno-frost:     #E8EAF0;  /* Frost           */
-  --seno-slate:     #8A96AA;  /* Slate           */
+  color-scheme: light dark;
+
+  /* Ink scale — 유일한 팔레트 */
+  --ink-000: #FFFFFF;
+  --ink-050: #FAFAFA;
+  --ink-100: #F4F4F4;
+  --ink-200: #E5E5E5;
+  --ink-300: #D4D4D4;
+  --ink-600: #6E6E6E;
+  --ink-900: #1A1A1A;
 
   /* UI 토큰 — Light */
-  --bg:        var(--seno-cloud);
-  --surface:   #FFFFFF;
-  --fg:        var(--seno-navy);   /* 10.5:1 */
-  --muted:     #5F6B80;            /*  4.9:1 — Slate 파생 */
-  --line:      var(--seno-frost);
-  --accent:    #3B5F8A;            /*  6.0:1 — Mist Blue 파생 */
-  --accent-bg: var(--seno-mist);
-  --code-bg:   #EDF0F5;
+  --bg:       var(--ink-000);
+  --surface:  var(--ink-050);
+  --fg:       var(--ink-900);   /* 16.7:1 */
+  --muted:    var(--ink-600);   /*  5.3:1 */
+  --line:     var(--ink-200);
+  --chip:     var(--ink-100);
+  --code-bg:  var(--ink-100);
+  --rule:     var(--ink-300);   /* 링크 밑줄 */
 
   --max: 46rem;
-  --radius: 10px;
+  --radius: 8px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg:        #212B3D;
-    --surface:   var(--seno-navy);
-    --fg:        #DFE5EF;            /* 11.2:1 */
-    --muted:     #9AA5B8;            /*  5.7:1 */
-    --line:      #3A4761;
-    --accent:    var(--seno-mist);   /*  9.5:1 */
-    --accent-bg: #3E5273;
-    --code-bg:   #2A3548;
+    --bg:       #121212;
+    --surface:  #1A1A1A;
+    --fg:       #E8E8E8;        /* 14.6:1 */
+    --muted:    #9A9A9A;        /*  6.5:1 */
+    --line:     #2E2E2E;
+    --chip:     #202020;
+    --code-bg:  #1C1C1C;
+    --rule:     #555555;
   }
 }
 
@@ -57,15 +59,24 @@ body {
   font-family: 'DM Sans', 'Pretendard', 'Apple SD Gothic Neo',
                'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
   font-size: 17px;
-  line-height: 1.75;
+  line-height: 1.78;
   word-break: keep-all;
   overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
 }
+
+::selection { background: var(--chip); color: var(--fg); }
 
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 1.25rem; }
 
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
+/* 크롬 링크 — 밑줄 없음 */
+a { color: var(--fg); text-decoration: none; }
+a:hover { color: var(--muted); }
+a:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
 
 /* ── header ── */
 .site-header { border-bottom: 1px solid var(--line); margin-bottom: 3rem; }
@@ -77,11 +88,11 @@ a:hover { text-decoration: underline; }
   display: inline-flex; align-items: center; gap: 0.55rem;
   font-weight: 500; font-size: 1.05rem; color: var(--fg); letter-spacing: -0.01em;
 }
-.brand:hover { text-decoration: none; }
+.brand:hover { color: var(--fg); }
 .brand svg { flex-shrink: 0; }
 .site-header nav { display: flex; gap: 1rem; margin-left: auto; font-size: 0.9rem; }
 .site-header nav a { color: var(--muted); }
-.site-header nav a:hover { color: var(--fg); text-decoration: none; }
+.site-header nav a:hover { color: var(--fg); }
 
 /* ── footer ── */
 .site-footer {
@@ -91,12 +102,13 @@ a:hover { text-decoration: underline; }
 }
 .site-footer .wrap { display: flex; gap: 1rem; flex-wrap: wrap; }
 .site-footer a { color: var(--muted); }
+.site-footer a:hover { color: var(--fg); }
 
 /* ── typography ── */
-h1, h2, h3 { line-height: 1.3; letter-spacing: -0.02em; font-weight: 500; }
+h1, h2, h3 { line-height: 1.35; letter-spacing: -0.02em; font-weight: 500; }
 h1 { font-size: 1.85rem; margin: 0 0 0.5rem; }
-h2 { font-size: 1.3rem; margin: 2.5rem 0 0.75rem; }
-h3 { font-size: 1.08rem; margin: 2rem 0 0.5rem; }
+h2 { font-size: 1.3rem; margin: 2.75rem 0 0.85rem; }
+h3 { font-size: 1.06rem; margin: 2rem 0 0.5rem; }
 
 .muted { color: var(--muted); }
 time {
@@ -107,10 +119,10 @@ time {
 
 /* ── post list ── */
 .post-list { list-style: none; padding: 0; margin: 0; }
-.post-list li { padding: 1.5rem 0; border-bottom: 1px solid var(--line); }
+.post-list li { padding: 1.6rem 0; border-bottom: 1px solid var(--line); }
 .post-list h2 { font-size: 1.12rem; margin: 0 0 0.3rem; }
 .post-list h2 a { color: var(--fg); }
-.post-list h2 a:hover { color: var(--accent); text-decoration: none; }
+.post-list h2 a:hover { color: var(--muted); }
 .post-list p { margin: 0.4rem 0 0.6rem; color: var(--muted); font-size: 0.94rem; }
 
 /* ── tags ── */
@@ -120,18 +132,38 @@ time {
   border: 1px solid var(--line); border-radius: 999px; color: var(--muted);
   font-family: 'DM Mono', ui-monospace, monospace;
 }
-a.tag:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+a.tag:hover { border-color: var(--muted); color: var(--fg); }
 
 /* ── article body ── */
 .prose { margin-top: 2.5rem; }
-.prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
-.prose blockquote {
-  margin: 1.5rem 0; padding: 0.5rem 0 0.5rem 1rem;
-  border-left: 3px solid var(--accent-bg); color: var(--muted);
+.prose p { margin: 1.15rem 0; }
+.prose ul, .prose ol { padding-left: 1.3rem; }
+.prose li { margin: 0.4rem 0; }
+.prose img, .prose svg { max-width: 100%; height: auto; }
+.prose img { border-radius: var(--radius); }
+
+/* 본문 링크만 밑줄 — 색이 아니라 형태로 구분합니다 */
+.prose a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
 }
-.prose table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 1.5rem 0; }
+.prose a:hover { color: var(--fg); text-decoration-color: var(--fg); }
+
+.prose blockquote {
+  margin: 1.6rem 0; padding: 0.2rem 0 0.2rem 1.1rem;
+  border-left: 2px solid var(--rule); color: var(--muted);
+}
+.prose blockquote strong { color: var(--fg); }
+
+.prose table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.9rem; margin: 1.6rem 0; display: block; overflow-x: auto;
+}
 .prose th, .prose td { border: 1px solid var(--line); padding: 0.5rem 0.7rem; text-align: left; }
-.prose th { background: var(--code-bg); font-weight: 500; }
+.prose th { background: var(--chip); font-weight: 500; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 3rem 0; }
 
 code {
@@ -143,14 +175,17 @@ code {
 }
 pre {
   padding: 1rem; border-radius: var(--radius);
-  overflow-x: auto; font-size: 0.84rem; line-height: 1.6;
+  overflow-x: auto; font-size: 0.84rem; line-height: 1.65;
+  background: var(--code-bg);
   border: 1px solid var(--line);
 }
 pre code { background: none; padding: 0; font-size: inherit; }
 
 .draft-badge {
-  font-size: 0.7rem; background: var(--seno-caution); color: #4A3A1E;
-  padding: 0.12rem 0.5rem; border-radius: 4px;
+  font-size: 0.7rem;
+  background: var(--chip); color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 0.1rem 0.45rem; border-radius: 4px;
   margin-left: 0.5rem; vertical-align: middle; font-weight: 500;
 }
 
@@ -163,35 +198,31 @@ pre code { background: none; padding: 0; font-size: inherit; }
 .cat {
   display: inline-block;
   font-size: 0.72rem; font-weight: 500; letter-spacing: 0.01em;
-  padding: 0.16rem 0.6rem; border-radius: 5px;
+  padding: 0.14rem 0.55rem; border-radius: 4px;
+  background: var(--chip); color: var(--fg);
+  border: 1px solid var(--line);
   white-space: nowrap;
 }
-a.cat:hover { text-decoration: none; filter: brightness(0.95); }
+a.cat:hover { border-color: var(--muted); color: var(--fg); }
 
-.cat--mist     { background: var(--seno-mist);     color: #22304A; }
-.cat--caution  { background: var(--seno-caution);  color: #4A3A1E; }
-.cat--sage     { background: var(--seno-sage);     color: #1E3A2E; }
-.cat--frost    { background: var(--seno-frost);    color: #3C465C; }
-.cat--lavender { background: var(--seno-lavender); color: #2A1E3A; }
-
-/* 카테고리 목록 */
+/* 카테고리 목록 — 색이 아니라 순서로 구분합니다 */
 .cat-list { list-style: none; padding: 0; margin: 2rem 0 0; }
-.cat-list li { margin-bottom: 0.6rem; }
+.cat-list li { margin-bottom: 0.55rem; }
 
 .cat-row {
   display: flex; align-items: center; gap: 0.9rem;
   padding: 0.9rem 1.1rem;
   border: 1px solid var(--line); border-radius: var(--radius);
   background: var(--surface); color: var(--fg);
-  border-left-width: 4px;
+  border-left: 3px solid var(--line);
 }
-.cat-row:hover { text-decoration: none; border-color: var(--muted); }
-.cat-row--mist     { border-left-color: var(--seno-mist); }
-.cat-row--caution  { border-left-color: var(--seno-caution); }
-.cat-row--sage     { border-left-color: var(--seno-sage); }
-.cat-row--frost    { border-left-color: var(--seno-slate); }
-.cat-row--lavender { border-left-color: var(--seno-lavender); }
+.cat-row:hover { border-color: var(--muted); border-left-color: var(--fg); color: var(--fg); }
 
+.cat-row-idx {
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: 0.78rem; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
 .cat-row-label { font-weight: 500; font-size: 0.98rem; }
 .cat-row-q     { color: var(--muted); font-size: 0.85rem; }
 .cat-row-count {
@@ -200,6 +231,7 @@ a.cat:hover { text-decoration: none; filter: brightness(0.95); }
 }
 
 @media (max-width: 34rem) {
+  body { font-size: 16px; }
   .cat-row { flex-wrap: wrap; gap: 0.3rem 0.9rem; }
   .cat-row-count { margin-left: auto; }
 }

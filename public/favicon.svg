@@ -1,7 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-  <circle cx="5"  cy="12" r="2.8" fill="#2D3A52"/>
-  <circle cx="19" cy="6"  r="2.8" fill="#2D3A52"/>
-  <circle cx="19" cy="18" r="2.8" fill="#2D3A52"/>
-  <line x1="7.5" y1="10.8" x2="16.5" y2="7.2"  stroke="#2D3A52" stroke-width="1.5"/>
-  <line x1="7.5" y1="13.2" x2="16.5" y2="16.8" stroke="#2D3A52" stroke-width="1.5"/>
+  <style>
+    .n { fill: #1A1A1A; stroke: #1A1A1A; }
+    @media (prefers-color-scheme: dark) { .n { fill: #E8E8E8; stroke: #E8E8E8; } }
+  </style>
+  <circle class="n" cx="5"  cy="12" r="2.8" stroke="none"/>
+  <circle class="n" cx="19" cy="6"  r="2.8" stroke="none"/>
+  <circle class="n" cx="19" cy="18" r="2.8" stroke="none"/>
+  <line class="n" x1="7.5" y1="10.8" x2="16.5" y2="7.2"  stroke-width="1.5"/>
+  <line class="n" x1="7.5" y1="13.2" x2="16.5" y2="16.8" stroke-width="1.5"/>
 </svg>

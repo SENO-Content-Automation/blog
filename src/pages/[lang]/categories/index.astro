@@ -16,9 +16,10 @@ const counts = await getCategoryCounts(lang);
   <p class="muted">Required → At risk → Prevented → Proven.</p>
 
   <ul class="cat-list">
-    {counts.map(({ slug, count }) => (
+    {counts.map(({ slug, count }, i) => (
       <li>
-        <a class={`cat-row cat-row--${CATEGORIES[slug].color}`} href={`/${lang}/categories/${slug}/`}>
+        <a class="cat-row" href={`/${lang}/categories/${slug}/`}>
+          <span class="cat-row-idx">{String(i + 1).padStart(2, '0')}</span>
           <span class="cat-row-label">{CATEGORIES[slug].label}</span>
           <span class="cat-row-q">{CATEGORIES[slug].question}</span>
           <span class="cat-row-count">{count}</span>

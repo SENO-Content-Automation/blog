@@ -5,10 +5,9 @@ import type { Lang } from '../consts';
 interface Props { slug: CategorySlug; lang: Lang; link?: boolean }
 const { slug, lang, link = true } = Astro.props;
 const meta = CATEGORIES[slug];
-const cls = `cat cat--${meta.color}`;
 ---
 {link ? (
-  <a class={cls} href={`/${lang}/categories/${slug}/`}>{meta.label}</a>
+  <a class="cat" href={`/${lang}/categories/${slug}/`}>{meta.label}</a>
 ) : (
-  <span class={cls}>{meta.label}</span>
+  <span class="cat">{meta.label}</span>
 )}
