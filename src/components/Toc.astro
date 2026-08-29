@@ -1,0 +1,25 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props { headings: MarkdownHeading[] }
+const { headings } = Astro.props;
+
+/**
+ * h2·h3만 씁니다. h1은 글 제목이고, h4 아래는 목차에 넣으면 지도가 아니라 색인이 됩니다.
+ * 항목이 3개 미만이면 목차가 오히려 방해가 되므로 아예 그리지 않습니다.
+ */
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const show = items.filter((h) => h.depth === 2).length >= 3;
+---
+{show && (
+  <nav class="toc" aria-label="Table of contents">
+    <p class="toc-label">이 글의 순서</p>
+    <ol class="toc-list">
+      {items.map((h) => (
+        <li class={h.depth === 3 ? 'toc-sub' : undefined}>
+          <a href={`#${h.slug}`}>{h.text}</a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

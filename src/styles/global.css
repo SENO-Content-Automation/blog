@@ -146,12 +146,34 @@ a.tag:hover { border-color: var(--muted); color: var(--fg); }
 }
 .prose blockquote strong { color: var(--fg); }
 
+/* 표는 본문에서 정보 밀도가 가장 높은 자리입니다. 본문과 같은 무게로 두면
+   눈이 어디부터 읽어야 할지 몰라 통째로 건너뜁니다. 헤더에 무게를 주고
+   행간을 넓혀 '읽는 덩어리'로 분리합니다. */
 .prose table {
   width: 100%; border-collapse: collapse;
-  font-size: 0.9rem; margin: 1.6rem 0; display: block; overflow-x: auto;
+  font-size: 0.88rem; line-height: 1.6;
+  margin: 1.9rem 0; display: block; overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
-.prose th, .prose td { border: 1px solid var(--line); padding: 0.5rem 0.7rem; text-align: left; }
-.prose th { background: var(--chip); font-weight: 500; }
+.prose th, .prose td {
+  padding: 0.62rem 0.8rem; text-align: left; vertical-align: top;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--ink-100);
+}
+.prose th:last-child, .prose td:last-child { border-right: 0; }
+.prose thead th {
+  background: var(--chip); font-weight: 500; color: var(--fg);
+  border-bottom: 2px solid var(--rule);
+  white-space: nowrap;
+}
+.prose tbody tr:last-child td { border-bottom: 0; }
+/* display:block 이라 overflow:hidden 으로 자를 수 없습니다 — 모서리는 셀에 직접 줍니다 */
+.prose table { border: 1px solid var(--line); border-radius: var(--radius); }
+.prose thead th:first-child { border-top-left-radius: calc(var(--radius) - 1px); }
+.prose thead th:last-child  { border-top-right-radius: calc(var(--radius) - 1px); }
+/* 표 안의 링크는 밑줄을 지웁니다 — 줄마다 밑줄이 깔리면 격자가 두 겹이 됩니다 */
+.prose td a { text-decoration-color: transparent; border-bottom: 1px solid var(--rule); }
+.prose td a:hover { border-bottom-color: var(--fg); }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 3rem 0; }
 
 code {
@@ -222,4 +244,70 @@ a.cat:hover { border-color: var(--muted); color: var(--fg); }
   body { font-size: 16px; }
   .cat-row { flex-wrap: wrap; gap: 0.3rem 0.9rem; }
   .cat-row-count { margin-left: auto; }
+}
+
+
+/* ── 글머리: 독자가 본문에 들어가기 전에 판단할 재료 ── */
+.byline {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem;
+  margin: 0.55rem 0 0; font-size: 0.82rem;
+}
+.byline-sep { color: var(--ink-300); }
+.reading {
+  color: var(--muted);
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 요약 한 줄. 본문보다 크게 두어 '읽기 전에 읽는 문장'임을 보이게 합니다. */
+.lead {
+  margin: 1.5rem 0 0;
+  font-size: 1.06rem; line-height: 1.7; color: var(--fg);
+  padding-left: 0.95rem; border-left: 2px solid var(--fg);
+}
+
+/* 목차. 이 블로그에서 목차는 편의 장치가 아니라 글의 뼈대를 보여주는 장치입니다 —
+   어떤 순서로 생각이 진행되는지가 본문을 열기 전에 보여야 합니다. */
+.toc {
+  margin: 2.2rem 0 0;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.95rem 1.2rem 1rem;
+}
+.toc-label {
+  margin: 0 0 0.55rem;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+}
+.toc-list { margin: 0; padding: 0; list-style: none; counter-reset: toc; }
+.toc-list > li { margin: 0; }
+.toc-list > li:not(.toc-sub) { counter-increment: toc; }
+.toc-list a {
+  display: block; padding: 0.3rem 0;
+  font-size: 0.9rem; line-height: 1.5; color: var(--fg);
+  text-decoration: none;
+}
+.toc-list a:hover { color: var(--muted); }
+.toc-list > li:not(.toc-sub) > a::before {
+  content: counter(toc, decimal-leading-zero);
+  display: inline-block; width: 2.1rem;
+  color: var(--ink-300);
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: 0.78rem;
+}
+.toc-sub > a {
+  padding-left: 2.1rem; font-size: 0.83rem; color: var(--muted);
+}
+.toc-sub > a::before {
+  content: '—'; display: inline-block; width: 1rem;
+  margin-left: -1rem; color: var(--ink-300);
+}
+
+/* 목차에서 건너뛴 자리가 헤더 밑에 깔리지 않게 */
+.prose h2, .prose h3 { scroll-margin-top: 1.5rem; }
+
+.post-tags { margin-top: 2.5rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+
+@media (max-width: 34rem) {
+  .lead { font-size: 1rem; }
+  .toc { padding: 0.95rem 1.05rem 1rem; }
 }

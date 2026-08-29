@@ -8,6 +8,7 @@ export const ui = {
   'site.desc': 'Notes on safety engineering for AI-powered robots',
   'post.updated': 'Updated',
   'post.readAll': 'All posts',
+  'post.minRead': 'min read',
   'tags.title': 'Tags',
   'tags.postsWith': 'Posts tagged',
   'empty': 'No posts yet.',

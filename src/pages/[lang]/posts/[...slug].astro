@@ -2,7 +2,9 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import CategoryBadge from '../../../components/CategoryBadge.astro';
+import Toc from '../../../components/Toc.astro';
 import { getAllPublished, slugOf, langOf, type Post } from '../../../lib/posts';
+import { readingMinutes } from '../../../lib/readingTime';
 import type { Lang } from '../../../consts';
 import type { CategorySlug } from '../../../categories';
 import { t } from '../../../i18n/ui';
@@ -19,25 +21,41 @@ export async function getStaticPaths() {
 const { post } = Astro.props as { post: Post };
 const lang = Astro.params.lang as Lang;
 const tr = t(lang);
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const category = post.data.category as CategorySlug | undefined;
+const minutes = readingMinutes(post.body ?? '', lang);
 ---
 <BaseLayout title={post.data.title} description={post.data.description} lang={lang} type="article">
   <article>
     {category && <div class="post-meta"><CategoryBadge slug={category} lang={lang} /></div>}
     <h1>{post.data.title}</h1>
-    <FormattedDate date={post.data.pubDate} lang={lang} />
-    {post.data.updatedDate && (
-      <span class="muted"> · {tr('post.updated')} <FormattedDate date={post.data.updatedDate} lang={lang} /></span>
-    )}
-    {post.data.tags.length > 0 && (
-      <div class="tags">
-        {post.data.tags.map((tag) => <a class="tag" href={`/${lang}/tags/${tag}/`}>#{tag}</a>)}
-      </div>
-    )}
+
+    <p class="byline">
+      <FormattedDate date={post.data.pubDate} lang={lang} />
+      {post.data.updatedDate && (
+        <>
+          <span class="byline-sep">·</span>
+          <span class="muted">{tr('post.updated')} <FormattedDate date={post.data.updatedDate} lang={lang} /></span>
+        </>
+      )}
+      <span class="byline-sep">·</span>
+      <span class="reading">{minutes} {tr('post.minRead')}</span>
+    </p>
+
+    {/* 요약 — 독자가 본문에 들어가기 전에 이 글이 무엇을 답하는지 알고 시작하게 합니다 */}
+    <p class="lead">{post.data.description}</p>
+
+    <Toc headings={headings} />
+
     <div class="prose">
       <Content />
     </div>
+
+    {post.data.tags.length > 0 && (
+      <div class="tags post-tags">
+        {post.data.tags.map((tag) => <a class="tag" href={`/${lang}/tags/${tag}/`}>#{tag}</a>)}
+      </div>
+    )}
   </article>
   <p style="margin-top:3rem"><a href={`/${lang}/`}>← {tr('post.readAll')}</a></p>
 </BaseLayout>
