@@ -4,7 +4,7 @@ description: "같은 과제, 같은 데이터셋, 비슷한 성공률. 그런데
 pubDate: 2026-08-29
 category: failure-modes
 tags: ["paper-review", "runtime-monitoring"]
-draft: true
+draft: false
 ---
 
 ## 이 문서에서 다루는 범위
