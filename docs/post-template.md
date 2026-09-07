@@ -3,7 +3,7 @@ title: ""
 description: ""
 pubDate: 2026-00-00
 category:        # standards | failure-modes | safety-architecture | verification | robot-ai
-tags: []
+tags: []          # 형식 1개 + 주제 1~2개. 아래 WRITING.md §8 참고
 draft: true
 ---
 

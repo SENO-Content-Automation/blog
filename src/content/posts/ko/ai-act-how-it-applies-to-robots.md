@@ -3,7 +3,7 @@ title: "AI Act (EU) 2024/1689 와 한국 로봇 관련성"
 description: "AI Act가 우리 로봇에 언제 걸리는지, 걸린다면 어느 경로로 걸리는지 알아보고자 한다"
 pubDate: 2026-08-23
 category: standards
-tags: ["eu-regulation"]
+tags: ["regulation-digest", "eu-regulation"]
 draft: false
 ---
 

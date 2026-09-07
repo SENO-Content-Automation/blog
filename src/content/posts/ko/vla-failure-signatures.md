@@ -3,7 +3,7 @@ title: "로봇 정책은 아키텍처마다 다르게 실패합니다"
 description: "같은 과제, 같은 데이터셋, 비슷한 성공률. 그런데 두 정책이 실패하는 모양은 정반대였습니다."
 pubDate: 2026-08-29
 category: failure-modes
-tags: ["vla"]
+tags: ["paper-review", "runtime-monitoring"]
 draft: true
 ---
 
