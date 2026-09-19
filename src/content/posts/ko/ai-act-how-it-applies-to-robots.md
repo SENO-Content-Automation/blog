@@ -47,7 +47,7 @@ AI Act 적용 단계는 아래와 같이 나눌 수 있습니다.
   </g>
 </svg>
 
-이 글은 **고위험 판정까지**, 앞의 두 단계만 다룹니다. 판정이 나와야 [3]부터가 정해지기 때문입니다.
+이 글은 **고위험 판정까지**, 앞의 두 단계만 다룹니다. 판정이 나와야 [3]부터가 정해지기 때문입니다. 고위험이 되면 무엇을 갖춰야 하는지는 [제3장 제2절](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-8)에 있습니다.
 
 그리고 한국에서 로봇을 개발한다면 [1]~[2] 다음에 질문이 하나 더 남습니다 — **수출하지 않으면 상관없는 이야기인가.** 이것도 마지막에 함께 다루었습니다.
 
@@ -68,7 +68,7 @@ AI Act 적용 단계는 아래와 같이 나눌 수 있습니다.
 
 이 법이 우리한테 걸리는 기준은 제조사의 국적이나 공장 위치가 아닙니다. [제2조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-2)가 정하는 것은 **그 시스템이 EU 시장에 놓이는가**입니다. 한국에서 만들고 한국에서 조립해도 EU에 내놓는 순간 EU 제조사와 같은 의무를 지게 됩니다.
 
-의무를 지는 주체는 [제3조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-3)가 나눕니다. 자기 이름이나 상표로 시장에 내놓는 쪽이 **제공자**(provider), 그것을 자기 권한 아래에서 쓰는 쪽이 **배포자**(deployer)이고, 로봇을 만들어 파는 회사는 제공자입니다.
+의무를 지는 주체는 [제3조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-3)가 나눕니다. 자기 이름이나 상표로 시장에 내놓는 쪽이 **제공자**(provider), 그것을 자기 권한 아래에서 쓰는 쪽이 **배포자**(deployer)이고, 로봇을 만들어 파는 회사는 제공자입니다. 제공자가 지는 의무는 [제16조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-16)에, EU 밖 제공자가 EU 안에 두어야 하는 공인대리인은 [제22조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-22)에 있습니다.
 
 ---
 
@@ -196,22 +196,3 @@ AI Act는 이걸 명시적으로 다룹니다. [제25조](https://ai-act-service
 미래의 한국 로봇 안전 분야에 대해 지도를 그려보는 시간이 되었으면 합니다.
 
 다음에 더 좋은 글로 찾아뵙겠습니다. 감사합니다.
-
----
-
-## Reference
-
-| 질문 | 열어야 할 곳 |
-|---|---|
-| 우리 AI가 고위험인가 | [제6조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-6) |
-| 어떤 제품안전법이 대상인가 | [부속서 I](https://ai-act-service-desk.ec.europa.eu/en/ai-act/annex-1) |
-| 용도로 걸리는 목록은 | [부속서 III](https://ai-act-service-desk.ec.europa.eu/en/ai-act/annex-3) |
-| 금지·투명성 의무는 | [제5조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-5) · [제50조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-50) |
-| 고위험이면 무엇을 갖추나 | [제3장 제2절](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-8) |
-| 제공자·배포자, 역외 제공자의 공인대리인 | [제3조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-3) · [제16조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-16) · [제22조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-22) |
-| 부품 공급사에게 무엇이 요구되나 | [제25조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-25) |
-| 언제부터인가 · 왜 바뀌었나 | [제113조](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-113) · [Regulation (EU) 2026/1744](https://eur-lex.europa.eu/eli/reg/2026/1744/oj/eng) |
-| 우리 제품이 제3자 평가 대상인가 | [기계류규정 (EU) 2023/1230](https://eur-lex.europa.eu/eli/reg/2023/1230/oj/eng) |
-| 국내 의무는 | [인공지능 기본법 원문](https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EB%B0%9C%EC%A0%84%EA%B3%BC%EC%8B%A0%EB%A2%B0%EA%B8%B0%EB%B0%98%EC%A1%B0%EC%84%B1%EB%93%B1%EC%97%90%EA%B4%80%ED%95%9C%EA%B8%B0%EB%B3%B8%EB%B2%95) · [시행 정리](https://www.shinkim.com/kor/media/newsletter/3114) |
-
-법 전문은 [AI Act 원문](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng)에 있습니다.
