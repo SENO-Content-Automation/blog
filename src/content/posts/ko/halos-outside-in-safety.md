@@ -169,9 +169,9 @@ NVIDIA는 이 구조를 [풀스택](https://developer.nvidia.com/blog/inside-nvi
   <text x="8" y="376" fill="currentColor" font-size="11.5" opacity="0.7">점선 칸은 현장이 도는 동안에는 없다. 배포 전 회귀 시험에만 쓴다.</text>
 </svg>
 
-SDM이 내보내는 명령은 셋뿐입니다. REDUCE는 문서에 정의가 없고, [레퍼런스 수신기 코드](https://github.com/NVIDIA/halos-outside-in-safety)가 SLOW DOWN으로 해석합니다.
+감시자 둘은 [SEI가 소비하는 신뢰 리포트](https://docs.nvidia.com/halos-outside-in/latest/integration/components/event-integrator.html)를 올려보냅니다. SDM이 내보내는 명령은 셋뿐입니다. REDUCE는 문서에 정의가 없고, [레퍼런스 수신기 코드](https://github.com/NVIDIA/halos-outside-in-safety)가 SLOW DOWN으로 해석합니다.
 
-그림 아래쪽 점선 칸은 Closed-Loop Testing입니다. Isaac Sim에서 시나리오를 돌려 회귀를 잡는 도구라, 현장이 돌아가는 동안에는 이 칸이 존재하지 않습니다. 배포 전에만 씁니다.
+그림 아래쪽 점선 칸은 [Closed-Loop Testing](https://docs.nvidia.com/halos-outside-in/latest/testing/index.html)입니다. Isaac Sim이 가상 창고와 지게차와 작업자를 돌리고 그 위에서 제품 소프트웨어를 그대로 돌려보는 검증 환경입니다. 현장이 돌아가는 동안에는 이 칸이 존재하지 않습니다.
 
 ## 언제 쓸 수 있나
 
@@ -185,17 +185,13 @@ SDM이 내보내는 명령은 셋뿐입니다. REDUCE는 문서에 정의가 없
 >
 > — [Safety Decision Maker 문서](https://docs.nvidia.com/halos-outside-in/latest/integration/components/decision-maker.html)
 
-[저장소](https://github.com/NVIDIA/halos-outside-in-safety)가 들고 있는 레퍼런스 시나리오는 워크셀 근접 감시(proximity)와 창고 하역장의 자율 트레일러 적재(ATL)입니다. 후자는 고정 카메라와 AI 인지가 작업자와 자율 지게차를 함께 감시하는 구성입니다. 다만 Known Limitations 기준으로 검증된 범위는 지게차 한 대, 이벤트 유형 세 종입니다. README도 같은 선을 긋습니다 — 프로토타이핑과 통합 개발용이고, 자체 인증된 안전 계층 없이 양산 안전 시스템에 쓰지 말라고 적혀 있습니다.
-
 ## 지금 어디까지 왔나
 
 [생태계에는 40곳이 넘는 회사](https://nvidianews.nvidia.com/news/nvidia-announces-halos-for-robotics-the-industrys-first-full-stack-safety-system-for-physical-ai)가 들어와 있습니다. 인증기관만 TÜV Rheinland, TÜV SÜD, UL Solutions, exida, SGS, CertX 여섯 곳이고, 반도체 쪽에 Infineon·NXP·STMicroelectronics·TI, 산업 응용 쪽에 FORT Robotics와 KION Group이 있습니다.
 
 제일 구체적인 이름은 [Agility Robotics](https://nvidianews.nvidia.com/news/nvidia-announces-halos-for-robotics-the-industrys-first-full-stack-safety-system-for-physical-ai)입니다. 휴머노이드 Digit의 **자체 사람 감지 시스템**에 IGX Thor와 Halos Core를 넣고 있습니다. Outside-In이 아니라 온보드 쪽입니다. 단계는 통합 중이고, 랩에서 Digit의 안전 소프트웨어와 AI 구성요소, 보안을 점검하겠다는 계획까지입니다. 출하도 인증도 아닙니다.
 
-표준 쪽도 움직입니다. NVIDIA는 능동 안정 로봇을 다루는 [ISO 25785-1에 "active contribution" 중](https://developer.nvidia.com/blog/inside-nvidia-halos-for-robotics-a-full-stack-functional-safety-system-for-physical-ai/)이라고 밝히고, 기능안전과 AI를 다루는 ISO/IEC TS 22440을 준비 중인 표준으로 듭니다. 다만 협동로봇 쪽 ISO 10218-1:2025와 개인 지원 로봇 쪽 ISO 13482는 제가 확인한 Halos 자료 어디에도 없습니다.
-
-남는 질문은 하나입니다. 이 구조가 고정 워크셀 바깥으로 나갈 수 있는가. Inside-Out 쪽 저장소는 공개돼 있지 않아서 온보드 절반은 문서로만 봤고, 그래서 아직 답을 못 하겠습니다.
+표준 쪽도 움직입니다. NVIDIA는 능동 안정 로봇을 다루는 [ISO 25785-1에 "active contribution" 중](https://developer.nvidia.com/blog/inside-nvidia-halos-for-robotics-a-full-stack-functional-safety-system-for-physical-ai/)이라고 밝히고, 기능안전과 AI를 다루는 ISO/IEC TS 22440을 준비 중인 표준으로 듭니다.
 
 ## 마무리
 
