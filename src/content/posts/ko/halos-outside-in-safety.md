@@ -4,7 +4,7 @@ description: "감시하는 쪽은 전부 작업장에 있습니다. 블루프린
 pubDate: 2026-09-19
 category: safety-architecture
 tags: ["product-analysis", "machine-safety"]
-draft: true
+draft: false
 ---
 
 <!-- ① 훅  ★ 자동화 금지 (WRITING.md §6) — 아래는 초안입니다. 본인 문장으로 고쳐 쓰세요. -->
