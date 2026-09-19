@@ -1,196 +1,213 @@
 ---
 title: "NVIDIA Halos — 안전 감시를 로봇 바깥에 두는 구조"
-description: ""
+description: "감시하는 쪽은 전부 작업장에 있습니다. 블루프린트가 주는 부품 중에 로봇에 올라가는 것은 없습니다."
 pubDate: 2026-09-19
 category: safety-architecture
 tags: ["product-analysis", "machine-safety"]
-draft: true
+draft: false
 ---
 
-<!-- ══════════════════════════════════════════════════════════
-     3편 작업 지시서 — 목차는 합의됨, 본문만 채우면 됨
-     추가 조사 불필요. 재료는 전부 docs/research/ 에 있음.
+<!-- ① 훅  ★ 자동화 금지 (WRITING.md §6) — 아래는 초안입니다. 본인 문장으로 고쳐 쓰세요. -->
 
-     논지 한 줄:
-       Halos for Robotics는 로봇의 안전 감시를 로봇이 아니라
-       작업장 인프라에 둔 구조다. 그래서 쓸 수 있는 현장과
-       없는 현장이 갈린다.
+NVIDIA가 2026년 6월 22일에 공개한 [Halos for Robotics](https://developer.nvidia.com/blog/inside-nvidia-halos-for-robotics-a-full-stack-functional-safety-system-for-physical-ai/)에는 [Outside-In Safety](https://docs.nvidia.com/halos-outside-in/latest/)라는 블루프린트가 있습니다. 부품 목록을 보면 로봇에 올라가는 것이 없습니다. 카메라는 천장에 달리고, 인지와 판단은 작업장 연산 장치에서 돌아갑니다. 로봇 쪽으로 넘어가는 것은 명령 하나이고, 그 명령을 받는 코드는 제품에 들어 있지 않습니다.
 
-     목표 분량 ~3,350자 / 7분
-     ⚠ 코드에서 나온 발견(MUTE 방향·54.5초·옵코드 충돌·래치 극성)은
-       전부 4편 몫. 이 글에 넣지 말 것. 예고도 하지 말 것(WRITING.md §3).
-     ══════════════════════════════════════════════════════════ -->
-
-
-<!-- ① 훅  ~200자  ★ 자동화 금지 (WRITING.md §6)
-     2026년 6월 22일 공개.
-     구성 요소 목록에 로봇에 올라가는 게 없다는 사실 하나로 시작.
-     카메라도 연산 장치도 작업장에 설치됨.
-     정의문으로 시작하지 말 것. -->
-
-
-## 왜 바깥인가
-
-<!-- ② ~450자  ★뼈대 — WRITING.md §3의 "왜 이게 지금 나왔나"
-     · 온보드 인지에는 등급을 매길 수 없다
-       — 학습된 가중치에 요구사항 추적과 구조적 커버리지를 만들 방법이 없음
-     · 고정 카메라는 다르다 — 시야 고정, 조명 통제, 검증할 장면이 유한
-
-     ▸ 자동차↔로봇 대비 (★ 자동화 금지, 글당 최소 1회):
-       도로에는 카메라를 못 단다. 공장 벽에는 단다.
-       로봇 안전에는 자동차에 없는 선택지가 하나 더 있다. -->
-
-
-## 무엇으로 되어 있나
-
-<!-- ③ ~800자 + 아래 다이어그램
-     표 하나로:
-       IGX Thor       Thor SoC + FSI + 안전 MCU
-       Halos Core     OS 층 (Linux / Linux+QNX)
-       AI Perception  VSS 블루프린트 — 교체 가능한 부품
-       Safety Core    이벤트 통합 · 판단 · 명령 전송
-       Edge Safety Link / HSB
-       Closed-Loop Testing   Isaac Sim — 런타임 컴포넌트 아님 -->
-
-<svg viewBox="0 0 720 320" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="Halos Outside-In Safety 구조 — 작업장에 고정된 카메라에서 AI 인지와 Safety Core를 거쳐 장비로 명령이 간다">
-  <title>Halos Outside-In Safety 구조</title>
+<svg viewBox="0 0 720 268" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="감시하는 장비는 전부 작업장에 설치되고, 로봇 쪽으로는 명령 하나만 건너간다">
+  <title>Halos Outside-In — 감시는 작업장, 로봇은 명령만 받는다</title>
   <defs>
-    <marker id="hx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="hk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
     </marker>
   </defs>
 
   <g fill="currentColor" font-size="11" opacity="0.65">
-    <text x="14" y="20">오프보드 — 인프라 측</text>
-    <text x="558" y="20">온보드 — 장비 측</text>
+    <text x="14" y="20">오프보드 — 작업장 인프라</text>
+    <text x="520" y="20">온보드 — 장비</text>
   </g>
 
-  <line x1="546" y1="28" x2="546" y2="306" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.5"/>
+  <line x1="490" y1="30" x2="490" y2="222" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.5"/>
+
+  <line x1="14" y1="44" x2="450" y2="44" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.6">
+    <rect x="92" y="44" width="34" height="16" rx="2"/>
+    <rect x="300" y="44" width="34" height="16" rx="2"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="1" opacity="0.35">
+    <path d="M92 60 L56 126 L162 126 Z"/>
+    <path d="M300 60 L264 126 L370 126 Z"/>
+  </g>
+  <text x="140" y="56" fill="currentColor" font-size="10.5" opacity="0.7">고정 카메라</text>
+
+  <line x1="14" y1="140" x2="450" y2="140" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.6">
+    <rect x="150" y="154" width="212" height="58" rx="6"/>
+  </g>
+  <text x="166" y="180" fill="currentColor" font-size="13">연산 장치</text>
+  <text x="166" y="198" fill="currentColor" font-size="10.5" opacity="0.7">인지 · 이벤트 융합 · 판단</text>
+
+  <g fill="none" stroke="currentColor" stroke-width="1.4">
+    <path d="M362 183 L508 183" marker-end="url(#hk)"/>
+  </g>
+  <text x="435" y="174" fill="currentColor" font-size="10.5" text-anchor="middle" opacity="0.8">명령 하나</text>
 
   <g fill="none" stroke="currentColor" stroke-width="1.6">
-    <rect x="14"  y="46" width="104" height="72" rx="6"/>
-    <rect x="142" y="46" width="168" height="72" rx="6"/>
-    <rect x="334" y="46" width="176" height="72" rx="6"/>
-    <rect x="578" y="46" width="128" height="72" rx="6"/>
+    <rect x="530" y="140" width="176" height="72" rx="6"/>
+  </g>
+  <text x="546" y="172" fill="currentColor" font-size="13">장비</text>
+  <text x="546" y="192" fill="currentColor" font-size="10.5" opacity="0.7">명령을 받는 코드는 직접 씁니다</text>
+
+  <line x1="14" y1="236" x2="706" y2="236" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
+  <text x="14" y="256" fill="currentColor" font-size="11.5" opacity="0.7">감시하는 쪽은 전부 작업장에 있다. 경계를 넘는 것은 명령 하나다.</text>
+</svg>
+
+## 왜 바깥인가
+
+로봇에 달린 카메라로 사람을 감지하는 기능에 안전 등급을 매기려고 하면 같은 자리에서 막힙니다. ISO 26262든 IEC 61508이든 체계적 고장에 대해 요구하는 것은 요구사항 추적성과 구조적 커버리지인데, 학습된 가중치를 상대로 그걸 만드는 방법이 아직 없습니다.
+
+고정 카메라는 조건이 다릅니다. 시야가 고정돼 있고, 조명을 통제할 수 있고, 검증해야 할 장면의 집합이 유한합니다. 셋 다 같은 것을 뜻합니다 — 인지를 **닫힌 문제**로 줄일 수 있다는 것. 로봇에 달린 카메라는 로봇이 가는 곳마다 입력 분포가 바뀌어서 그 목록을 닫을 수 없습니다.
+
+## 무엇으로 되어 있나
+
+NVIDIA는 이 구조를 [풀스택](https://developer.nvidia.com/blog/inside-nvidia-halos-for-robotics-a-full-stack-functional-safety-system-for-physical-ai/)이라고 부릅니다.
+
+| Component | What it is |
+|---|---|
+| IGX Thor | Thor SoC + 전용 Functional Safety Island(FSI) + 안전 MCU |
+| Halos Core | 로봇에 올라가는 안전 OS. Linux 구성과 Linux+QNX 구성 |
+| Holoscan Sensor Bridge | [센서·액추에이터 이더넷 링크](https://developer.download.nvidia.com/assets/igx/robotics-product-brief-igx-thor-safety-4473375.pdf). end-to-end IEC 61508 SIL 2 프로토콜 |
+| AI Perception | VSS(Video Search and Summarization) 블루프린트 기반 인지. 교체 가능한 부품 |
+| Safety Core | 작업장 쪽 이벤트 융합, 판단, 명령 전송 |
+| Closed-Loop Testing | Isaac Sim 회귀 시험 |
+
+이 중에서 교체를 전제로 설계된 것은 **AI Perception 하나**입니다. 카메라 배치도 감시 대상도 현장마다 다르니 인지 모델이 같을 수가 없습니다. 나머지는 뼈대입니다.
+
+뼈대의 안쪽은 조각마다 약어 이름을 달고 있고, 문서가 그 약어로만 씁니다. [용어집](https://docs.nvidia.com/halos-outside-in/latest/reference/glossary.html)에서 옮겨 적습니다. 블루프린트 자체는 **HOISA**입니다.
+
+| 약어 | 원어 | 하는 일 |
+|---|---|---|
+| SIPP | Sensor Input Processing Pipeline | 카메라·레이더 원본을 DNN·CV로 돌려 구조화된 표현으로 |
+| SAIM | Safety AI Monitor | 카메라 입력이 건전한지 감시 (분포 밖 입력·가림·끊김) |
+| PCM | Perception Container Monitor | 인지 파이프라인이 살아 있는지 감시 |
+| SEI | Safety Event Integrator | 안전 이벤트를 시간 축으로 융합 |
+| SDM | Safety Decision Maker | 융합된 사건을 명령으로 번역. UDP로 내보냄 |
+| SBB · SUI | Safety Black Box · Safety User Interface | 기록·감사 추적, 운영자 화면 |
+
+<svg viewBox="0 0 720 382" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="Safety Core 내부 — 고정 카메라에서 SIPP, SEI, SDM을 거쳐 장비로 명령이 나가고, SAIM과 PCM이 인지 건전성을 감시한다">
+  <title>Safety Core 내부 파이프라인</title>
+  <defs>
+    <marker id="pp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <g fill="currentColor" font-size="11" opacity="0.65">
+    <text x="8" y="18">작업장 인프라</text>
+    <text x="566" y="18">장비</text>
+  </g>
+
+  <line x1="540" y1="26" x2="540" y2="212" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.5"/>
+
+  <g fill="none" stroke="currentColor" stroke-width="1" opacity="0.6">
+    <rect x="200" y="40" width="128" height="46" rx="6"/>
+    <rect x="348" y="40" width="128" height="46" rx="6"/>
+    <path d="M264 86 L292 112" marker-end="url(#pp)"/>
+    <path d="M412 86 L344 112" marker-end="url(#pp)"/>
+  </g>
+  <g fill="currentColor" font-size="12.5" opacity="0.8">
+    <text x="214" y="62">SAIM</text>
+    <text x="362" y="62">PCM</text>
+  </g>
+  <g fill="currentColor" font-size="10" opacity="0.6">
+    <text x="214" y="78">입력 건전성</text>
+    <text x="362" y="78">파이프라인 건전성</text>
+  </g>
+
+  <g fill="none" stroke="currentColor" stroke-width="1.6">
+    <rect x="8"   y="120" width="96"  height="64" rx="6"/>
+    <rect x="124" y="120" width="118" height="64" rx="6"/>
+    <rect x="262" y="120" width="108" height="64" rx="6"/>
+    <rect x="390" y="120" width="118" height="64" rx="6"/>
+    <rect x="566" y="120" width="146" height="64" rx="6"/>
   </g>
   <g fill="currentColor" font-size="13">
-    <text x="30"  y="72">고정 카메라</text>
-    <text x="158" y="72">AI Perception</text>
-    <text x="350" y="72">Safety Core</text>
-    <text x="592" y="72">장비</text>
+    <text x="20"  y="148">카메라</text>
+    <text x="138" y="148">SIPP</text>
+    <text x="276" y="148">SEI</text>
+    <text x="404" y="148">SDM</text>
+    <text x="580" y="148">장비</text>
   </g>
   <g fill="currentColor" font-size="10.5" opacity="0.7">
-    <text x="30"  y="92">워크셀 감시</text>
-    <text x="158" y="92">VSS Blueprint</text>
-    <text x="158" y="107">교체 가능한 부품</text>
-    <text x="350" y="92">이벤트 통합 · 판단</text>
-    <text x="350" y="107">STOP · REDUCE · NORMAL</text>
-    <text x="592" y="92">지게차 · 휴머노이드</text>
+    <text x="20"  y="166">고정 설치</text>
+    <text x="138" y="166">원본 → 구조화</text>
+    <text x="276" y="166">이벤트 융합</text>
+    <text x="404" y="166">명령으로 번역</text>
+    <text x="580" y="166">수신기는 직접 씁니다</text>
   </g>
 
   <g fill="none" stroke="currentColor" stroke-width="1.4">
-    <path d="M118 82 L138 82" marker-end="url(#hx)"/>
-    <path d="M310 82 L330 82" marker-end="url(#hx)"/>
-    <path d="M510 82 L574 82" marker-end="url(#hx)"/>
+    <path d="M104 152 L120 152" marker-end="url(#pp)"/>
+    <path d="M242 152 L258 152" marker-end="url(#pp)"/>
+    <path d="M370 152 L386 152" marker-end="url(#pp)"/>
+    <path d="M508 152 L562 152" marker-end="url(#pp)"/>
   </g>
-  <g fill="currentColor" font-size="10.5" opacity="0.8">
-    <text x="322" y="36" text-anchor="middle">structured events</text>
-    <text x="512" y="36">명령</text>
-  </g>
+  <text x="392" y="204" fill="currentColor" font-size="10.5" opacity="0.8">STOP · REDUCE · NORMAL</text>
 
   <g fill="none" stroke="currentColor" stroke-width="1" opacity="0.45">
-    <path d="M226 118 L226 148"/>
-    <path d="M422 118 L422 148"/>
+    <path d="M180 184 L180 224"/>
   </g>
   <g fill="none" stroke="currentColor" stroke-width="1.6">
-    <rect x="142" y="148" width="368" height="58" rx="6"/>
+    <rect x="124" y="224" width="384" height="46" rx="6"/>
   </g>
-  <text x="158" y="174" fill="currentColor" font-size="13">플랫폼 — IGX Thor + Halos Core</text>
-  <text x="158" y="192" fill="currentColor" font-size="10" opacity="0.7">separation · fault reporting · heartbeat · supervision</text>
+  <text x="138" y="252" fill="currentColor" font-size="12.5">플랫폼 — IGX Thor 또는 x86-64 + GPU</text>
 
   <g fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.55">
-    <path d="M326 206 L326 244"/>
-    <rect x="142" y="244" width="368" height="56" rx="6"/>
+    <path d="M316 270 L316 296"/>
+    <rect x="124" y="296" width="384" height="46" rx="6"/>
   </g>
-  <text x="158" y="268" fill="currentColor" font-size="12.5" opacity="0.6">오프라인 — Closed-Loop Testing</text>
-  <text x="158" y="286" fill="currentColor" font-size="10" opacity="0.5">Isaac Sim · 회귀 리포트 — 런타임 안전 컴포넌트가 아님</text>
+  <text x="138" y="324" fill="currentColor" font-size="12" opacity="0.6">Closed-Loop Testing — Isaac Sim</text>
+
+  <line x1="8" y1="356" x2="712" y2="356" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
+  <text x="8" y="376" fill="currentColor" font-size="11.5" opacity="0.7">점선 칸은 현장이 도는 동안에는 없다. 배포 전 회귀 시험에만 쓴다.</text>
 </svg>
 
+감시자 둘은 [SEI가 소비하는 신뢰 리포트](https://docs.nvidia.com/halos-outside-in/latest/integration/components/event-integrator.html)를 올려보냅니다. SDM이 내보내는 명령은 셋뿐입니다. REDUCE는 문서에 정의가 없고, [레퍼런스 수신기 코드](https://github.com/NVIDIA/halos-outside-in-safety)가 SLOW DOWN으로 해석합니다.
+
+그림 아래쪽 점선 칸은 [Closed-Loop Testing](https://docs.nvidia.com/halos-outside-in/latest/testing/index.html)입니다. Isaac Sim이 가상 창고와 지게차와 작업자를 돌리고 그 위에서 제품 소프트웨어를 그대로 돌려보는 검증 환경입니다. 현장이 돌아가는 동안에는 이 칸이 존재하지 않습니다.
 
 ## 언제 쓸 수 있나
 
-<!-- ④ ~700자
-     맞는 곳:  고정 워크셀, 카메라 설치 가능, 감시 대상이 정해진 구역 안
-     레퍼런스 시나리오 둘:
-        · proximity — 근접 감시
-        · ATL (Autonomous Trailer Loading) — 자율 트레일러 적재
-     안 맞는 곳: 옥외 이동, 비정형 환경, 카메라 설치 불가
+현장 조건부터 걸립니다. 감시할 구역이 고정돼 있어야 하고, 천장이나 기둥에 카메라를 달 수 있어야 하고, 조명이 통제돼야 합니다. 옥외를 돌아다니는 장비나 배치가 매번 바뀌는 비정형 환경에서는 이 구조가 애초에 성립하지 않습니다.
 
-     ▸ 도입 조건 하나 더:
-       판단 로직(SDM)은 배포마다 통합자가 구현한다.
-       Halos가 주는 건 경로와 뼈대지 정책이 아니다.
-       (원문: "SDM logic is deployment-specific;
-                integrators implement their own behavior.") -->
+하드웨어는 양쪽에 다 필요합니다. [통합 가이드](https://docs.nvidia.com/halos-outside-in/latest/integration/index.html) 기준으로 인프라 쪽은 IGX-Thor 또는 x86-64에 GPU를 얹고, 인지는 Kafka로, 판단 명령은 UDP로 흐릅니다. 장비 쪽에는 그 명령을 받아 실제 동작으로 바꾸는 수신기가 있어야 하는데, **이건 제품에 들어 있지 않습니다.**
 
+직접 써야 하는 것이 셋 더 있습니다. 이벤트 매핑 설정(Protobuf), SDM 판단 로직, 그리고 액추에이터 인터페이스입니다. 문서가 선을 직접 긋습니다.
 
-## 무엇이 "인증"되는가
+> "SDM logic is deployment-specific; integrators implement their own behavior."
+>
+> — [Safety Decision Maker 문서](https://docs.nvidia.com/halos-outside-in/latest/integration/components/decision-maker.html)
 
-<!-- ⑤ ~550자  ★ 실무 독자가 제일 먼저 확인하는 것
-     단어가 전부 다르다는 게 요지. 원문 표현 그대로 인용할 것.
-       · "compliant with ISO 26262 up to ASIL D"      ← 개발 프로세스가
-       · "random hardware integrity of ASIL B"         ← SoC 자체는
-         (Safety Island는 IEC 61508 SIL 3)
-       · Halos AI Systems Inspection Lab
-         = ANAB 인정 ISO/IEC 17020 검사기관. 제품 인증 기관이 아님
-       · 고객이 받는 것: inspection report + inspection certificate.
-         최종 인증은 별도 기관에서.
-     "certified"라는 단어는 문서 어디에도 나오지 않는다. -->
+## 지금 어디까지 왔나
 
+[생태계에는 40곳이 넘는 회사](https://nvidianews.nvidia.com/news/nvidia-announces-halos-for-robotics-the-industrys-first-full-stack-safety-system-for-physical-ai)가 들어와 있습니다. 인증기관만 TÜV Rheinland, TÜV SÜD, UL Solutions, exida, SGS, CertX 여섯 곳이고, 반도체 쪽에 Infineon·NXP·STMicroelectronics·TI, 산업 응용 쪽에 FORT Robotics와 KION Group이 있습니다.
 
-## 처음엔 이렇게 생각했다
+제일 구체적인 이름은 [Agility Robotics](https://nvidianews.nvidia.com/news/nvidia-announces-halos-for-robotics-the-industrys-first-full-stack-safety-system-for-physical-ai)입니다. 휴머노이드 Digit의 **자체 사람 감지 시스템**에 IGX Thor와 Halos Core를 넣고 있습니다. Outside-In이 아니라 온보드 쪽입니다. 단계는 통합 중이고, 랩에서 Digit의 안전 소프트웨어와 AI 구성요소, 보안을 점검하겠다는 계획까지입니다. 출하도 인증도 아닙니다.
 
-<!-- ⑥ ~350자  ★ 자동화 금지 (WRITING.md §6)
-     조사 과정에서 실제로 틀렸던 것 — 본인 것으로 바꿔 써도 됨:
+표준 쪽도 움직입니다. NVIDIA는 능동 안정 로봇을 다루는 [ISO 25785-1에 "active contribution" 중](https://developer.nvidia.com/blog/inside-nvidia-halos-for-robotics-a-full-stack-functional-safety-system-for-physical-ai/)이라고 밝히고, 기능안전과 AI를 다루는 ISO/IEC TS 22440을 준비 중인 표준으로 듭니다.
 
-     | 처음 생각 | 실제 |
-     | "Halos는 안전 상태를 정의하지 않는다"
-       → 정의한다. STOP/REDUCE/NORMAL, 래치, SAFE_RELEASE 3단 핸드셰이크까지.
-         비어 있는 건 그 다음 — 명령을 받은 장비가 물리적으로 무엇을 하는가
-     | "Halos에 비상정지 용어가 없다"
-       → pss_protocol.h:75 에 ESTOP이 있다. 문서에 없을 뿐
-     | "NVIDIA가 로봇 표준을 무시한다"
-       → 기술 블로그에 ISO 25785-1 "active contribution"이 적혀 있다.
-         ISO 10218-1:2025 과 ISO 13482 가 빠진 건 맞다
+## 마무리
 
-     세 번째가 제일 쓸모 있음 — 자료만 읽고 판단했다가
-     원문에서 반대 문장을 찾은 경우 -->
+지금까지 Halos for Robotics가 안전 감시를 어디에 두었는지, 무엇으로 되어 있고 어떤 현장에 쓸 수 있는지 알아봤습니다.
 
+감시하는 쪽은 전부 작업장에 있습니다. 로봇이 받는 것은 명령 하나이고, 그 명령을 받아 무엇을 할지는 로봇 만드는 쪽이 씁니다.
 
-## 아직 모르는 것
-
-<!-- ⑦ ~300자  ★ 자동화 금지 (WRITING.md §6)
-     · 저장소의 수신기 코드는 스스로 "Simulates"라고 밝힌다. 제품 기본값이 아님
-     · 실제 IGX Thor 배포에서 FSI가 이 값들을 어떻게 쓰는지는 공개 자료로 확인 못 함
-     · Inside-Out 쪽 저장소는 공개돼 있지 않음 -->
-
-
----
-
-## 참고
-
-<!-- ⑧ 1차 출처만. 파일:줄번호까지.
-     - NVIDIA/halos-outside-in-safety (Apache-2.0)
-     - IGX Thor 안전 제품 브리프
-     - NVIDIA 기술 블로그 (2026-06-22) -->
+다음에 더 좋은 글로 찾아뵙겠습니다. 감사합니다.
 
 
 <!-- ─────────────────────────────────────────
      발행 전 체크 (docs/WRITING.md §7)
      □ 첫 두 줄이 정의문이 아닌가
      □ 숫자·버전·조항이 최소 하나
-     □ 틀렸던 이야기가 있는가
-     □ 모르는 것을 밝혔는가
-     □ 자동차 ↔ 로봇 대비가 한 번 이상
+     □ 헤맨 이야기나 못 확인한 것이 있다면 적었는가
+     □ 사실이 나오는 문장마다 1차 출처 링크가 붙어 있는가
      □ 불릿이 절반을 넘지 않는가
      □ 다음 글 예고가 없는가
      □ grep -rnP '\*\*[^*]*[)\]\.,:;!?]\*\*[가-힣]' src/content/posts/
