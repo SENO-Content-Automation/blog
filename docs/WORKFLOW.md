@@ -206,8 +206,39 @@ tags: split tags into form and subject, and write the rule down
 | 안 되는 것 | 대신 |
 |---|---|
 | 파일 삭제 (`rm`) | `_to_delete/` 로 이동 (`.gitignore`에 있음) |
-| `git push` | AI가 커밋까지만. push는 사용자가 Windows에서 |
 | Google Drive 파일을 컨테이너로 올리기 | 컨테이너에서 만들어 사용자에게 보낸 뒤 기록 |
+
+### push와 머지는 됩니다
+
+2026-09-19에 확인했습니다. 이전 문장("`git push`가 안 됩니다")은 SSH만 보고 쓴 것이라 틀렸습니다.
+
+브리지 VM에는 HTTP(S) 프록시만 있고 평범한 TCP는 없습니다. 그래서 갈라집니다.
+
+| 경로 | 되나 | 조건 |
+|---|---|---|
+| `https://github.com/...` | **됨** | 공개 저장소면 읽기는 인증 없이. 쓰기는 토큰 |
+| `git@github.com:...` (SSH) | **됨** | git이 쓰는 프록시 경유 `ProxyCommand`로 나갑니다. 단 `known_hosts`를 먼저 채워야 하고, 키가 저장소에 등록돼 있어야 합니다 |
+| `ssh` 를 직접 호출 | 안 됨 | 프록시 설정을 안 타므로 이름 해석부터 실패합니다 |
+
+`known_hosts`는 GitHub이 게시하는 호스트 키로 채웁니다.
+
+```bash
+curl -sS https://api.github.com/meta \
+  | python3 -c "import sys,json;[print('github.com',k) for k in json.load(sys.stdin)['ssh_keys']]" \
+  > ~/.ssh/known_hosts
+```
+
+**쓰기 자격증명은 GitHub App 설치 토큰을 씁니다.** 사용자 PC의 `.pem`으로 JWT를 만들어
+설치 토큰(1시간)을 받고, 그 토큰으로 push·PR 생성·머지를 합니다.
+토큰은 **HTTPS 주소에만** 붙습니다. `origin`이 SSH면 `git push origin`은 실패하니
+HTTPS 주소를 명시하세요.
+
+```bash
+git -c credential.helper='!f(){ echo username=x-access-token; echo "password=$(cat ~/.gh-token)"; }; f' \
+    push https://github.com/SENO-Content-Automation/blog.git <브랜치>
+```
+
+토큰은 저장소 폴더 밖(브리지 VM의 홈)에 두고, 값을 출력하지 않습니다.
 
 추가로:
 
@@ -250,6 +281,9 @@ tags: split tags into form and subject, and write the rule down
 
 PR을 쓰면 이 게이트가 저절로 생깁니다. 브랜치가 올라가면 배포 프리뷰가 뜨고,
 읽고 머지하면 그게 발행입니다. 폰에서도 됩니다.
+
+**게이트는 결정이지 클릭이 아닙니다.** 사람이 프리뷰를 읽고 "머지해"라고 말하면
+버튼은 자동화가 눌러도 됩니다. 넘으면 안 되는 선은 *사람이 읽지 않은 채로 머지되는 것*입니다.
 
 ---
 
