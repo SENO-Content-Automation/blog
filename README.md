@@ -1,6 +1,10 @@
-# 블로그 스캐폴드 (Astro)
+# Safety Node (SENO) 블로그
 
-한국어/영어 2개 언어를 지원하는 정적 블로그입니다.
+한국어/영어 2개 언어를 지원하는 Astro 정적 블로그입니다.
+배포는 Vercel — <https://safetynode.vercel.app/ko/>
+
+절차와 문체 규칙은 `docs/`에 있습니다. 글을 쓰기 전에
+[`docs/WORKFLOW.md`](./docs/WORKFLOW.md)와 [`docs/WRITING.md`](./docs/WRITING.md)를 읽으세요.
 
 ## 처음 한 번만 하는 설정
 

@@ -2,7 +2,8 @@
 
 > 작성: 2026-08-19
 > 프로젝트 경로: `D:\astro-blog-scaffold\blog-scaffold`
-> **다음 목표: GitHub → Vercel 배포**
+> 저장소: [SENO-Content-Automation/blog](https://github.com/SENO-Content-Automation/blog)
+> 배포: Vercel — <https://safetynode.vercel.app/ko/>
 
 ---
 
@@ -131,7 +132,7 @@ git branch -M main
 GitHub에서 새 저장소 생성 (**Public** 권장) 후:
 
 ```bash
-git remote add origin https://github.com/Seong-Yong-Park/<repo>.git
+git remote add origin git@github.com:SENO-Content-Automation/blog.git
 git push -u origin main
 ```
 
