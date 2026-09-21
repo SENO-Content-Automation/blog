@@ -1,6 +1,6 @@
 ---
-title: "World-Action Model — 동작을 내기 전에 다음 장면을 그린다"
-description: "로봇 정책 사이에 한 칸이 생겼습니다. 그 한 칸이 무엇을 바꿨는지 봅니다."
+title: "World-Action Model — 동작과 함께 다음 장면을 그린다"
+description: "로봇 정책에 칸 하나가 더 생겼습니다. 그 칸이 무엇을 바꿨는지 봅니다."
 pubDate: 2026-09-21
 category: robot-ai
 tags: ["paper-review", "vla"]
@@ -25,12 +25,12 @@ draft: true
 
 방식은 달라도 **공통점이 하나 있습니다. 그림에서 동작으로 한 번에 갑니다.** 중간에 아무것도 없습니다.
 
-## WAM은 사이에 한 칸을 넣는다
+## WAM은 동작을 혼자 만들지 않는다
 
-WAM이 바꾼 것이 정확히 그 지점입니다. 동작을 바로 내지 않고 **"이렇게 하면 다음에 이렇게 보일 것"을 먼저 그립니다.** 그리고 그 장면에서 동작을 꺼냅니다.
+WAM이 바꾼 것이 정확히 그 지점입니다. 동작만 내놓지 않고 **"그러면 다음에 이렇게 보일 것"을 같이 만듭니다.** 그리고 동작 쪽이 그 장면을 보고 나옵니다.
 
-<svg viewBox="0 0 720 286" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="기존 정책은 그림에서 동작으로 한 번에 가고, WAM은 다음 장면을 먼저 그린 뒤 거기서 동작을 꺼낸다">
-  <title>기존 정책과 WAM의 경로</title>
+<svg viewBox="0 0 720 346" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="기존 정책은 그림에서 동작으로 한 번에 가고, WAM은 다음 장면과 동작을 같이 만들되 동작이 그 장면을 보고 나온다">
+  <title>기존 정책과 WAM의 구조</title>
   <defs>
     <marker id="w3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
@@ -55,34 +55,39 @@ WAM이 바꾼 것이 정확히 그 지점입니다. 동작을 바로 내지 않�
     <path d="M164 67 L244 67" marker-end="url(#w3)"/>
     <path d="M448 67 L528 67" marker-end="url(#w3)"/>
   </g>
-  <text x="14" y="146" fill="currentColor" font-size="11" opacity="0.65">WAM — 사이에 한 칸이 생겼다</text>
+  <text x="14" y="136" fill="currentColor" font-size="11" opacity="0.65">WAM — 장면과 동작을 같이 만든다</text>
+  <rect x="248" y="142" width="200" height="134" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4" opacity="0.45"/>
   <g fill="none" stroke="currentColor" stroke-width="1.6">
-    <rect x="14" y="160" width="150" height="54" rx="6"/>
-    <rect x="248" y="160" width="200" height="54" rx="6"/>
-    <rect x="532" y="160" width="150" height="54" rx="6"/>
+    <rect x="14" y="182" width="150" height="54" rx="6"/>
+    <rect x="258" y="152" width="180" height="44" rx="6"/>
+    <rect x="258" y="222" width="180" height="44" rx="6"/>
+    <rect x="532" y="217" width="150" height="54" rx="6"/>
   </g>
   <g fill="currentColor" font-size="13">
-    <text x="28" y="186">카메라 그림</text>
-    <text x="262" y="186">다음 장면을 그린다</text>
-    <text x="546" y="192">관절 명령</text>
+    <text x="28" y="208">카메라 그림</text>
+    <text x="270" y="172">다음 장면을 그린다</text>
+    <text x="270" y="249">동작을 만든다</text>
+    <text x="546" y="249">관절 명령</text>
   </g>
   <g fill="currentColor" font-size="10.5" opacity="0.7">
-    <text x="28" y="204">+ 무엇을 하라는 지시</text>
-    <text x="262" y="204">이렇게 될 것이다</text>
-    <text x="488" y="178" text-anchor="middle">그 장면에서</text>
-    <text x="488" y="208" text-anchor="middle">동작을 꺼낸다</text>
+    <text x="28" y="226">+ 무엇을 하라는 지시</text>
+    <text x="270" y="188">이렇게 될 것이다</text>
   </g>
   <g fill="none" stroke="currentColor" stroke-width="1.4">
-    <path d="M164 187 L244 187" marker-end="url(#w3)"/>
-    <path d="M448 187 L528 187" marker-end="url(#w3)"/>
+    <path d="M164 209 L244 209" marker-end="url(#w3)"/>
+    <path d="M348 198 L348 218" marker-end="url(#w3)"/>
+    <path d="M438 244 L528 244" marker-end="url(#w3)"/>
   </g>
+  <text x="358" y="214" fill="currentColor" font-size="10.5" opacity="0.75">이 장면을 보고</text>
   <g fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.6">
-    <path d="M348 214 L348 240" marker-end="url(#w3)"/>
+    <path d="M348 276 L348 296" marker-end="url(#w3)"/>
   </g>
-  <text x="360" y="238" fill="currentColor" font-size="10.5" opacity="0.75">이 중간 장면은 밖에서 볼 수 있다</text>
-  <line x1="14" y1="256" x2="706" y2="256" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
-  <text x="14" y="276" fill="currentColor" font-size="11.5" opacity="0.7">달라진 것은 가운데 상자 하나다. 나머지는 그대로다.</text>
+  <text x="360" y="294" fill="currentColor" font-size="10.5" opacity="0.75">이 중간 장면은 밖에서 볼 수 있다</text>
+  <line x1="14" y1="312" x2="706" y2="312" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
+  <text x="14" y="332" fill="currentColor" font-size="11.5" opacity="0.7">더 생긴 것은 장면 칸 하나다. 동작은 그 장면을 보고 나온다.</text>
 </svg>
+
+사람이 컵을 집을 때와 같습니다. 머릿속 그림을 다 그린 다음에 팔을 뻗는 게 아니라, 그리면서 같이 움직입니다.
 
 왜 이런 게 가능하냐면, **출발점으로 쓴 모델이 원래 영상을 만들던 모델**이기 때문입니다.
 
@@ -92,7 +97,11 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 
 > "a policy that starts from a pretrained world-model or video backbone and adapts it to represent or predict how the scene changes over time and emit corresponding actions."
 
-가운데 칸을 어디에 어떻게 붙이느냐는 팀마다 다릅니다. [Cosmos Policy](https://arxiv.org/abs/2601.16163)는 영상 시퀀스 안에 밀어 넣었고, [GE-Act 2.0](https://arxiv.org/abs/2609.05588)은 아예 부품 셋으로 쪼갰습니다. 구조는 달라도 **가운데 한 칸이 생겼다는 것은 같습니다.**
+**둘 중 무엇이 먼저 나오느냐는 팀마다 다릅니다.** [GE-Act 2.0](https://arxiv.org/abs/2609.05588)과 [DreamZero](https://arxiv.org/abs/2602.15922)는 장면을 먼저 그리고 거기서 동작을 뽑습니다. [Cosmos Policy](https://arxiv.org/abs/2601.16163)는 반대로 동작이 먼저 나오고 미래 장면이 뒤따르게 시퀀스를 짰습니다. [OpenWAM](https://arxiv.org/abs/2609.07398)이 이 선택지들을 통제 실험으로 비교했는데, 결론은 **둘을 동시에 다듬는 쪽**이 제일 낫다는 것이었습니다.
+
+> "World–action synergy requires explicit world-to-action information flow during training, and synchronized joint denoising at inference."
+
+순서가 무엇이든 공통점은 하나입니다. **동작이 혼자 나오지 않습니다.** 같이 만들어진 장면이 근거로 붙습니다.
 
 ## 왜 이게 더 잘 됐나
 
@@ -107,7 +116,7 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 사람 영상  →  영상 예측만             동작은 채점하지 않음
 ```
 
-정답이 없는 항목은 채점에서 빼면 됩니다. 그래서 라벨 없는 영상도 **가운데 칸을 키우는 데는 그대로 쓰입니다.** 이 방식으로 다른 로봇과 사람의 영상만 가지고 처음 보는 과제 성능을 42% 상대 개선했고, 새 로봇으로 옮길 때는 30분치 데이터로 붙였습니다. [OpenWAM](https://arxiv.org/abs/2609.07398)은 아예 1인칭 사람 영상과 로봇 영상 약 6,400시간으로 사전학습했습니다.
+정답이 없는 항목은 채점에서 빼면 됩니다. 그래서 라벨 없는 영상도 **장면 칸을 키우는 데는 그대로 쓰입니다.** 이 방식으로 다른 로봇과 사람의 영상만 가지고 처음 보는 과제 성능을 42% 상대 개선했고, 새 로봇으로 옮길 때는 30분치 데이터로 붙였습니다. [OpenWAM](https://arxiv.org/abs/2609.07398)은 아예 1인칭 사람 영상과 로봇 영상 약 6,400시간으로 사전학습했습니다.
 
 ## 언제 써볼 수 있나
 
@@ -122,7 +131,7 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 
 과제별 파인튜닝 없이 20개 스킬 그룹, 100개 조작 과제를 돌린 결과입니다. **100배를 먹여 2.6배가 됐고, 여전히 절반 넘게 실패합니다.** 사람이 안 보는 곳에 둘 수 있는 숫자가 아닙니다.
 
-속도도 마찬가지입니다. DreamZero는 140억 파라미터 모델로 **7Hz 폐루프 제어**를 합니다. 한 주기가 143ms인데, 그냥 되는 게 아니라 5.7초를 150ms로 줄인 38배 최적화의 결과입니다. **가운데 칸이 공짜가 아니라는 뜻**이고, 빠른 반응이 필요한 자리에는 아직 안 맞습니다.
+속도도 마찬가지입니다. DreamZero는 140억 파라미터 모델로 **7Hz 폐루프 제어**를 합니다. 한 주기가 143ms인데, 그냥 되는 게 아니라 5.7초를 150ms로 줄인 38배 최적화의 결과입니다. **그 칸이 공짜가 아니라는 뜻**이고, 빠른 반응이 필요한 자리에는 아직 안 맞습니다.
 
 그래서 지금 이 계열이 쓸모 있는 자리는 좁습니다. **팔과 그리퍼로 하는 조작 과제**, 사람이 옆에서 지켜보는 환경, 그리고 **로봇 시연 데이터가 부족해서 사람 영상으로 메워야 하는 경우**입니다. 마지막 항목이 이 계열의 고유한 쓸모입니다.
 
@@ -130,9 +139,9 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 
 ## 마무리
 
-지금까지 로봇 정책 사이에 한 칸이 생긴 것, 그 칸이 다음 장면을 그린다는 것, 그게 가능해진 이유가 라벨 없는 영상이었다는 것, 그리고 지금 그걸 어디에 써볼 수 있는지를 알아봤습니다.
+지금까지 로봇 정책에 칸 하나가 더 생긴 것, 그 칸이 다음 장면을 그린다는 것, 그게 가능해진 이유가 라벨 없는 영상이었다는 것, 그리고 지금 그걸 어디에 써볼 수 있는지를 알아봤습니다.
 
-바뀐 것은 가운데 상자 하나입니다. 그런데 그 한 칸 때문에 **모델이 무엇을 예상하고 움직이는지가 밖에서 보이게** 됐습니다.
+더 생긴 것은 칸 하나입니다. 그런데 그 한 칸 때문에 **모델이 무엇을 예상하고 움직이는지가 밖에서 보이게** 됐습니다.
 
 다음에 더 좋은 글로 찾아뵙겠습니다. 감사합니다.
 
