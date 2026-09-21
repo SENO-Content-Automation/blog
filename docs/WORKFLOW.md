@@ -171,6 +171,24 @@ npm run build
 | 캡션 | 하단 점선 아래 1~2줄. 그림이 말하려는 한 문장 |
 
 `<title>`과 `aria-label`을 반드시 넣습니다.
+
+### ⚠️ SVG 안에 빈 줄을 넣지 마세요
+
+마크다운이 SVG를 중간에서 끊습니다. 빈 줄은 HTML 블록을 끝내고, 그다음 줄이
+**여는 태그 하나만 있는 줄**이 아니면 나머지가 `<p>`로 감싸져 그림이 깨집니다.
+
+```
+</defs>
+                                  ← 이 빈 줄이
+  <text x="14" y="26">제목</text>   ← 이 줄을 문단으로 만든다
+```
+
+빈 줄 다음이 `<g ...>` 처럼 여는 태그 한 줄이면 우연히 살아남습니다. **운에 맡기지 말고
+SVG 안에서는 빈 줄을 아예 쓰지 마세요.** 확인은 이 한 줄로 합니다.
+
+```bash
+python3 -c "import re,sys;[print(f,len(re.findall(r'\n[ \t]*\n',m.group(0)))) for f in sys.argv[1:] for m in re.finditer(r'<svg.*?</svg>',open(f,encoding='utf-8').read(),re.S)]" src/content/posts/ko/*.md
+```
 기존 예시: 3편 작업물(`halos_blockdiagram.svg`)의 구조를 그대로 따르면 됩니다.
 
 ---
