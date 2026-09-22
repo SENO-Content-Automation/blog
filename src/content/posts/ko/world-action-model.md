@@ -166,18 +166,24 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 
 > "a policy that starts from a pretrained world-model or video backbone and adapts it to represent or predict how the scene changes over time and emit corresponding actions."
 
-**둘 중 무엇이 먼저 나오느냐는 팀마다 다릅니다.** [GE-Act 2.0](https://arxiv.org/abs/2609.05588)과 [DreamZero](https://arxiv.org/abs/2602.15922)는 장면을 먼저 그리고 거기서 동작을 뽑습니다. [Cosmos Policy](https://arxiv.org/abs/2601.16163)는 반대로 동작이 먼저 나오고 미래 장면이 뒤따르게 시퀀스를 짰습니다. [OpenWAM](https://arxiv.org/abs/2609.07398)이 이 선택지들을 통제 실험으로 비교했는데, 결론은 **둘을 동시에 다듬는 쪽**이 제일 낫다는 것이었습니다.
+**그 장면을 무엇에 쓰는지는 팀마다 다릅니다.** [GE-Act 2.0](https://arxiv.org/abs/2609.05588)과 [DreamZero](https://arxiv.org/abs/2602.15922)는 **재료**로 씁니다. 예측한 장면을 역동역학 모델에 넣고, 거기서 동작을 뽑습니다.
+
+[Cosmos Policy](https://arxiv.org/abs/2601.16163)는 **채점표**로 씁니다. 동작 후보를 여러 개 뽑아놓고, 후보마다 미래와 그 미래의 가치를 예측해서 제일 높은 것을 고릅니다. 장면이 동작을 만드는 게 아니라 **고르는 데** 들어갑니다. 이 고르는 과정은 꺼도 되고, 끄면 장면 예측은 학습할 때만 쓰인 목표가 됩니다.
+
+[OpenWAM](https://arxiv.org/abs/2609.07398)은 **참조**로 씁니다. 장면과 동작을 한 번에 같이 다듬으면서 동작 쪽이 장면 쪽을 계속 봅니다. 그리고 이 선택지들을 통제 실험으로 비교해서, 이 방식이 제일 낫다고 결론했습니다.
+
+쓰는 방식이 다르니 나오는 순서도 갈립니다. **재료로 쓰려면 장면이 먼저 나와야 하고, 채점표로 쓰려면 동작이 먼저 나와야 합니다.**
 
 > "World–action synergy requires explicit world-to-action information flow during training, and synchronized joint denoising at inference."
 
-<svg viewBox="0 0 720 352" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="GE-Act 2.0과 DreamZero는 다음 장면을 먼저 내고 동작을 뽑고, Cosmos Policy는 동작을 먼저 내고 장면이 뒤따르고, OpenWAM은 둘을 한 번에 같이 다듬는다. 어느 순서든 로봇으로 나가는 것은 관절값 한 묶음이다">
-  <title>장면과 동작 중 무엇을 먼저 내놓나</title>
+<svg viewBox="0 0 720 376" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="GE-Act 2.0과 DreamZero는 예측한 장면을 동작을 만드는 재료로 쓰고, Cosmos Policy는 동작 후보를 고르는 채점표로 쓰고, OpenWAM은 다듬는 동안 참조로 쓴다. 어느 쪽이든 로봇으로 나가는 것은 관절값이다">
+  <title>예측한 장면을 무엇에 쓰나</title>
   <defs>
     <marker id="d2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
     </marker>
   </defs>
-  <text x="14" y="20" fill="currentColor" font-size="11" opacity="0.65">무엇을 먼저 내놓나 — 순서는 팀마다 다르다</text>
+  <text x="14" y="20" fill="currentColor" font-size="11" opacity="0.65">예측한 장면을 무엇에 쓰나 — 팀마다 다르다</text>
   <g fill="currentColor" font-size="10" opacity="0.6" text-anchor="middle">
     <text x="164" y="46">다음 장면</text>
     <text x="288" y="46">동작 — 관절값</text>
@@ -198,58 +204,64 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
   <text x="256" y="90" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.12  -0.38</text>
   <text x="256" y="108" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.04   0.51  …</text>
   <path d="M212 93 L240 93" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#d2)"/>
-  <path d="M342 93 L374 93" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
-  <text x="382" y="97" fill="currentColor" font-size="11">로봇</text>
-  <text x="14" y="97" fill="currentColor" font-size="12">장면 먼저</text>
-  <text x="430" y="87" fill="currentColor" font-size="11.5">GE-Act 2.0 · DreamZero</text>
-  <text x="430" y="105" fill="currentColor" font-size="10" opacity="0.6">장면을 그린 뒤 거기서 동작을 뽑는다</text>
+  <path d="M342 93 L372 93" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
+  <text x="380" y="97" fill="currentColor" font-size="11">로봇</text>
+  <text x="14" y="91" fill="currentColor" font-size="12.5">재료</text>
+  <text x="14" y="109" fill="currentColor" font-size="10" opacity="0.6">장면 → 동작</text>
+  <text x="418" y="87" fill="currentColor" font-size="11.5">GE-Act 2.0 · DreamZero</text>
+  <text x="418" y="105" fill="currentColor" font-size="10" opacity="0.6">예측한 장면을 역동역학에 넣어 동작을 뽑는다</text>
   <g fill="none" stroke="currentColor" stroke-width="1.5">
-    <rect x="120" y="146" width="88" height="58" rx="6"/>
-    <rect x="244" y="146" width="88" height="58" rx="6"/>
+    <rect x="120" y="152" width="88" height="58" rx="6"/>
+    <rect x="244" y="152" width="88" height="58" rx="6"/>
   </g>
-  <line x1="130" y1="188" x2="198" y2="188" stroke="currentColor" stroke-width="1" opacity="0.35"/>
-  <path d="M174 172 L188 172 L186 188 L176 188 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <line x1="130" y1="194" x2="198" y2="194" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+  <path d="M174 178 L188 178 L186 194 L176 194 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
   <g fill="none" stroke="currentColor" stroke-width="1.3">
-    <path d="M146 158 L146 164"/>
-    <path d="M138 164 L154 164"/>
-    <path d="M138 164 L138 178"/>
-    <path d="M154 164 L154 178"/>
+    <path d="M146 164 L146 170"/>
+    <path d="M138 170 L154 170"/>
+    <path d="M138 170 L138 184"/>
+    <path d="M154 170 L154 184"/>
   </g>
-  <text x="256" y="172" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.12  -0.38</text>
-  <text x="256" y="190" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.04   0.51  …</text>
-  <path d="M240 175 L212 175" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#d2)"/>
-  <path d="M342 175 L374 175" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
-  <text x="382" y="179" fill="currentColor" font-size="11">로봇</text>
-  <text x="14" y="179" fill="currentColor" font-size="12">동작 먼저</text>
-  <text x="430" y="169" fill="currentColor" font-size="11.5">Cosmos Policy</text>
-  <text x="430" y="187" fill="currentColor" font-size="10" opacity="0.6">시퀀스를 (s, a, s′, V) 순서로 짰다</text>
-  <rect x="114" y="222" width="224" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4" opacity="0.45"/>
+  <text x="256" y="178" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.12  -0.38</text>
+  <text x="256" y="196" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.04   0.51  …</text>
+  <path d="M240 181 L212 181" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#d2)"/>
+  <path d="M164 216 L164 228 L288 228 L288 216" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.7" marker-end="url(#d2)"/>
+  <text x="300" y="232" fill="currentColor" font-size="10" opacity="0.75">골라낸다</text>
+  <path d="M342 181 L372 181" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
+  <text x="380" y="185" fill="currentColor" font-size="11">로봇</text>
+  <text x="14" y="179" fill="currentColor" font-size="12.5">채점표</text>
+  <text x="14" y="197" fill="currentColor" font-size="10" opacity="0.6">동작 → 장면</text>
+  <text x="418" y="175" fill="currentColor" font-size="11.5">Cosmos Policy</text>
+  <text x="418" y="193" fill="currentColor" font-size="10" opacity="0.6">후보들의 미래와 가치를 예측해 제일 좋은 걸 고른다</text>
+  <rect x="114" y="252" width="224" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4" opacity="0.45"/>
   <g fill="none" stroke="currentColor" stroke-width="2">
-    <rect x="120" y="228" width="88" height="58" rx="6"/>
-    <rect x="244" y="228" width="88" height="58" rx="6"/>
+    <rect x="120" y="258" width="88" height="58" rx="6"/>
+    <rect x="244" y="258" width="88" height="58" rx="6"/>
   </g>
-  <line x1="130" y1="270" x2="198" y2="270" stroke="currentColor" stroke-width="1" opacity="0.35"/>
-  <path d="M174 254 L188 254 L186 270 L176 270 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <line x1="130" y1="300" x2="198" y2="300" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+  <path d="M174 284 L188 284 L186 300 L176 300 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
   <g fill="none" stroke="currentColor" stroke-width="1.3">
-    <path d="M146 240 L146 246"/>
-    <path d="M138 246 L154 246"/>
-    <path d="M138 246 L138 260"/>
-    <path d="M154 246 L154 260"/>
+    <path d="M146 270 L146 276"/>
+    <path d="M138 276 L154 276"/>
+    <path d="M138 276 L138 290"/>
+    <path d="M154 276 L154 290"/>
   </g>
-  <text x="256" y="254" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.12  -0.38</text>
-  <text x="256" y="272" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.04   0.51  …</text>
-  <path d="M212 257 L240 257" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#d2)"/>
-  <path d="M342 257 L374 257" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
-  <text x="382" y="261" fill="currentColor" font-size="11">로봇</text>
-  <text x="14" y="261" fill="currentColor" font-size="12">동시</text>
-  <text x="14" y="279" fill="currentColor" font-size="10" opacity="0.6">한 번에 같이</text>
-  <text x="430" y="251" fill="currentColor" font-size="11.5">OpenWAM</text>
-  <text x="430" y="269" fill="currentColor" font-size="10" opacity="0.6">통제 실험 결론 — 이 방식이 제일 낫다</text>
-  <line x1="14" y1="318" x2="706" y2="318" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
-  <text x="14" y="340" fill="currentColor" font-size="11.5" opacity="0.7">순서가 무엇이든 로봇으로 나가는 것은 동작, 곧 관절값 한 묶음이다.</text>
+  <text x="256" y="284" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.12  -0.38</text>
+  <text x="256" y="302" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.04   0.51  …</text>
+  <path d="M212 287 L240 287" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#d2)"/>
+  <path d="M342 287 L372 287" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
+  <text x="380" y="291" fill="currentColor" font-size="11">로봇</text>
+  <text x="14" y="285" fill="currentColor" font-size="12.5">참조</text>
+  <text x="14" y="303" fill="currentColor" font-size="10" opacity="0.6">동시</text>
+  <text x="418" y="281" fill="currentColor" font-size="11.5">OpenWAM</text>
+  <text x="418" y="299" fill="currentColor" font-size="10" opacity="0.6">다듬는 동안 동작 쪽이 장면 쪽을 계속 본다</text>
+  <line x1="14" y1="140" x2="706" y2="140" stroke="currentColor" stroke-width="1" opacity="0.12"/>
+  <line x1="14" y1="246" x2="706" y2="246" stroke="currentColor" stroke-width="1" opacity="0.12"/>
+  <line x1="14" y1="342" x2="706" y2="342" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
+  <text x="14" y="364" fill="currentColor" font-size="11.5" opacity="0.7">쓰는 방식이 무엇이든 로봇으로 나가는 것은 동작, 곧 관절값 한 묶음이다.</text>
 </svg>
 
-순서가 무엇이든 공통점은 하나입니다. **동작이 혼자 나오지 않습니다.** 같이 만들어진 장면이 근거로 붙습니다.
+쓰는 방식이 무엇이든 공통점은 하나입니다. **동작이 혼자 나오지 않습니다.** 같이 만들어진 장면이 근거로 붙습니다.
 
 ## 왜 이게 더 잘 됐나
 
