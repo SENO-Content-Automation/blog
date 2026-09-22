@@ -170,6 +170,57 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 
 > "World–action synergy requires explicit world-to-action information flow during training, and synchronized joint denoising at inference."
 
+<svg viewBox="0 0 720 284" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="GE-Act 2.0과 DreamZero는 다음 장면을 먼저 내고 동작을 뽑고, Cosmos Policy는 동작을 먼저 내고 장면이 뒤따르고, OpenWAM은 둘을 한 번에 같이 다듬는 쪽이 제일 낫다고 결론했다">
+  <title>장면과 동작 중 무엇을 먼저 내놓나</title>
+  <defs>
+    <marker id="d2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+  <text x="14" y="20" fill="currentColor" font-size="11" opacity="0.65">무엇을 먼저 내놓나 — 팀마다 다르다</text>
+  <line x1="14" y1="30" x2="706" y2="30" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+  <text x="14" y="76" fill="currentColor" font-size="12">장면 먼저</text>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="140" y="56" width="86" height="32" rx="6"/>
+    <rect x="266" y="56" width="86" height="32" rx="6"/>
+  </g>
+  <g fill="currentColor" font-size="11.5" text-anchor="middle">
+    <text x="183" y="77">다음 장면</text>
+    <text x="309" y="77">동작</text>
+  </g>
+  <path d="M234 72 L258 72" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
+  <text x="440" y="70" fill="currentColor" font-size="11.5">GE-Act 2.0 · DreamZero</text>
+  <text x="440" y="88" fill="currentColor" font-size="10" opacity="0.6">장면을 그린 뒤 거기서 동작을 뽑는다</text>
+  <line x1="14" y1="108" x2="706" y2="108" stroke="currentColor" stroke-width="1" opacity="0.15"/>
+  <text x="14" y="154" fill="currentColor" font-size="12">동작 먼저</text>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="140" y="134" width="86" height="32" rx="6"/>
+    <rect x="266" y="134" width="86" height="32" rx="6"/>
+  </g>
+  <g fill="currentColor" font-size="11.5" text-anchor="middle">
+    <text x="183" y="155">동작</text>
+    <text x="309" y="155">다음 장면</text>
+  </g>
+  <path d="M234 150 L258 150" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
+  <text x="440" y="148" fill="currentColor" font-size="11.5">Cosmos Policy</text>
+  <text x="440" y="166" fill="currentColor" font-size="10" opacity="0.6">시퀀스를 (s, a, s′, V) 순서로 짰다</text>
+  <line x1="14" y1="186" x2="706" y2="186" stroke="currentColor" stroke-width="1" opacity="0.15"/>
+  <text x="14" y="233" fill="currentColor" font-size="12">동시</text>
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="140" y="196" width="86" height="26" rx="6"/>
+    <rect x="140" y="240" width="86" height="26" rx="6"/>
+  </g>
+  <g fill="currentColor" font-size="11.5" text-anchor="middle">
+    <text x="183" y="213">다음 장면</text>
+    <text x="183" y="257">동작</text>
+  </g>
+  <path d="M183 224 L183 238" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#d2)"/>
+  <path d="M236 196 L246 196 L246 266 L236 266" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+  <text x="258" y="235" fill="currentColor" font-size="11.5">한 번에 같이 다듬는다</text>
+  <text x="440" y="207" fill="currentColor" font-size="11.5">OpenWAM</text>
+  <text x="440" y="225" fill="currentColor" font-size="10" opacity="0.7">통제 실험 결론 — 이 방식이 제일 낫다</text>
+</svg>
+
 순서가 무엇이든 공통점은 하나입니다. **동작이 혼자 나오지 않습니다.** 같이 만들어진 장면이 근거로 붙습니다.
 
 ## 왜 이게 더 잘 됐나
@@ -180,10 +231,33 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 
 [DreamZero](https://arxiv.org/abs/2602.15922)의 해법이 간단합니다. **채점 기준을 데이터 출처마다 다르게 둡니다.**
 
-```
-로봇 시연  →  영상 예측 + 동작 예측   둘 다 채점
-사람 영상  →  영상 예측만             동작은 채점하지 않음
-```
+<svg viewBox="0 0 720 216" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="로봇 시연은 영상 예측과 동작 예측을 둘 다 채점하고, 사람 영상은 관절값이 없어서 영상 예측만 채점한다">
+  <title>데이터 출처마다 다른 채점 기준</title>
+  <defs>
+    <marker id="d1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+  <g fill="currentColor" font-size="11" opacity="0.65" text-anchor="middle">
+    <text x="250" y="24">영상 예측</text>
+    <text x="380" y="24">동작 예측</text>
+  </g>
+  <line x1="14" y1="36" x2="706" y2="36" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+  <text x="14" y="76" fill="currentColor" font-size="12.5">로봇 시연</text>
+  <text x="14" y="94" fill="currentColor" font-size="10" opacity="0.6">관절값이 붙어 있다</text>
+  <circle cx="250" cy="80" r="9" fill="currentColor" opacity="0.85"/>
+  <circle cx="380" cy="80" r="9" fill="currentColor" opacity="0.85"/>
+  <text x="440" y="84" fill="currentColor" font-size="11.5">둘 다 채점한다</text>
+  <line x1="14" y1="108" x2="706" y2="108" stroke="currentColor" stroke-width="1" opacity="0.15"/>
+  <text x="14" y="148" fill="currentColor" font-size="12.5">사람 영상</text>
+  <text x="14" y="166" fill="currentColor" font-size="10" opacity="0.6">관절값이 없다</text>
+  <circle cx="250" cy="152" r="9" fill="currentColor" opacity="0.85"/>
+  <circle cx="380" cy="152" r="9" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.6"/>
+  <line x1="373" y1="159" x2="387" y2="145" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+  <text x="440" y="156" fill="currentColor" font-size="11.5">동작은 채점에서 뺀다</text>
+  <line x1="14" y1="182" x2="706" y2="182" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
+  <text x="14" y="204" fill="currentColor" font-size="11.5" opacity="0.7">정답이 없는 항목만 빼면 된다. 그래서 라벨 없는 영상이 그대로 재료가 된다.</text>
+</svg>
 
 정답이 없는 항목은 채점에서 빼면 됩니다. 그래서 라벨 없는 영상도 **장면 칸을 키우는 데는 그대로 쓰입니다.** 이 방식으로 다른 로봇과 사람의 영상만 가지고 처음 보는 과제 성능을 42% 상대 개선했고, 새 로봇으로 옮길 때는 30분치 데이터로 붙였습니다. [OpenWAM](https://arxiv.org/abs/2609.07398)은 아예 1인칭 사람 영상과 로봇 영상 약 6,400시간으로 사전학습했습니다.
 
