@@ -4,7 +4,7 @@ description: "로봇 정책에 칸 하나가 더 생겼습니다. 그 칸이 무
 pubDate: 2026-09-21
 category: robot-ai
 tags: ["paper-review", "vla"]
-draft: true
+draft: false
 ---
 
 <!-- ① 훅  ★ 자동화 금지 (WRITING.md §6) — 아래는 초안입니다. 본인 문장으로 고쳐 쓰세요. -->
