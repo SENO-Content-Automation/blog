@@ -170,55 +170,83 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 
 > "World–action synergy requires explicit world-to-action information flow during training, and synchronized joint denoising at inference."
 
-<svg viewBox="0 0 720 284" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="GE-Act 2.0과 DreamZero는 다음 장면을 먼저 내고 동작을 뽑고, Cosmos Policy는 동작을 먼저 내고 장면이 뒤따르고, OpenWAM은 둘을 한 번에 같이 다듬는 쪽이 제일 낫다고 결론했다">
+<svg viewBox="0 0 720 352" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="GE-Act 2.0과 DreamZero는 다음 장면을 먼저 내고 동작을 뽑고, Cosmos Policy는 동작을 먼저 내고 장면이 뒤따르고, OpenWAM은 둘을 한 번에 같이 다듬는다. 어느 순서든 로봇으로 나가는 것은 관절값 한 묶음이다">
   <title>장면과 동작 중 무엇을 먼저 내놓나</title>
   <defs>
     <marker id="d2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
     </marker>
   </defs>
-  <text x="14" y="20" fill="currentColor" font-size="11" opacity="0.65">무엇을 먼저 내놓나 — 팀마다 다르다</text>
-  <line x1="14" y1="30" x2="706" y2="30" stroke="currentColor" stroke-width="1" opacity="0.25"/>
-  <text x="14" y="76" fill="currentColor" font-size="12">장면 먼저</text>
+  <text x="14" y="20" fill="currentColor" font-size="11" opacity="0.65">무엇을 먼저 내놓나 — 순서는 팀마다 다르다</text>
+  <g fill="currentColor" font-size="10" opacity="0.6" text-anchor="middle">
+    <text x="164" y="46">다음 장면</text>
+    <text x="288" y="46">동작 — 관절값</text>
+  </g>
+  <line x1="14" y1="54" x2="706" y2="54" stroke="currentColor" stroke-width="1" opacity="0.25"/>
   <g fill="none" stroke="currentColor" stroke-width="1.5">
-    <rect x="140" y="56" width="86" height="32" rx="6"/>
-    <rect x="266" y="56" width="86" height="32" rx="6"/>
+    <rect x="120" y="64" width="88" height="58" rx="6"/>
+    <rect x="244" y="64" width="88" height="58" rx="6"/>
   </g>
-  <g fill="currentColor" font-size="11.5" text-anchor="middle">
-    <text x="183" y="77">다음 장면</text>
-    <text x="309" y="77">동작</text>
+  <line x1="130" y1="106" x2="198" y2="106" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+  <path d="M174 90 L188 90 L186 106 L176 106 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.3">
+    <path d="M146 76 L146 82"/>
+    <path d="M138 82 L154 82"/>
+    <path d="M138 82 L138 96"/>
+    <path d="M154 82 L154 96"/>
   </g>
-  <path d="M234 72 L258 72" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
-  <text x="440" y="70" fill="currentColor" font-size="11.5">GE-Act 2.0 · DreamZero</text>
-  <text x="440" y="88" fill="currentColor" font-size="10" opacity="0.6">장면을 그린 뒤 거기서 동작을 뽑는다</text>
-  <line x1="14" y1="108" x2="706" y2="108" stroke="currentColor" stroke-width="1" opacity="0.15"/>
-  <text x="14" y="154" fill="currentColor" font-size="12">동작 먼저</text>
+  <text x="256" y="90" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.12  -0.38</text>
+  <text x="256" y="108" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.04   0.51  …</text>
+  <path d="M212 93 L240 93" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#d2)"/>
+  <path d="M342 93 L374 93" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
+  <text x="382" y="97" fill="currentColor" font-size="11">로봇</text>
+  <text x="14" y="97" fill="currentColor" font-size="12">장면 먼저</text>
+  <text x="430" y="87" fill="currentColor" font-size="11.5">GE-Act 2.0 · DreamZero</text>
+  <text x="430" y="105" fill="currentColor" font-size="10" opacity="0.6">장면을 그린 뒤 거기서 동작을 뽑는다</text>
   <g fill="none" stroke="currentColor" stroke-width="1.5">
-    <rect x="140" y="134" width="86" height="32" rx="6"/>
-    <rect x="266" y="134" width="86" height="32" rx="6"/>
+    <rect x="120" y="146" width="88" height="58" rx="6"/>
+    <rect x="244" y="146" width="88" height="58" rx="6"/>
   </g>
-  <g fill="currentColor" font-size="11.5" text-anchor="middle">
-    <text x="183" y="155">동작</text>
-    <text x="309" y="155">다음 장면</text>
+  <line x1="130" y1="188" x2="198" y2="188" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+  <path d="M174 172 L188 172 L186 188 L176 188 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.3">
+    <path d="M146 158 L146 164"/>
+    <path d="M138 164 L154 164"/>
+    <path d="M138 164 L138 178"/>
+    <path d="M154 164 L154 178"/>
   </g>
-  <path d="M234 150 L258 150" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
-  <text x="440" y="148" fill="currentColor" font-size="11.5">Cosmos Policy</text>
-  <text x="440" y="166" fill="currentColor" font-size="10" opacity="0.6">시퀀스를 (s, a, s′, V) 순서로 짰다</text>
-  <line x1="14" y1="186" x2="706" y2="186" stroke="currentColor" stroke-width="1" opacity="0.15"/>
-  <text x="14" y="233" fill="currentColor" font-size="12">동시</text>
+  <text x="256" y="172" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.12  -0.38</text>
+  <text x="256" y="190" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.04   0.51  …</text>
+  <path d="M240 175 L212 175" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#d2)"/>
+  <path d="M342 175 L374 175" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
+  <text x="382" y="179" fill="currentColor" font-size="11">로봇</text>
+  <text x="14" y="179" fill="currentColor" font-size="12">동작 먼저</text>
+  <text x="430" y="169" fill="currentColor" font-size="11.5">Cosmos Policy</text>
+  <text x="430" y="187" fill="currentColor" font-size="10" opacity="0.6">시퀀스를 (s, a, s′, V) 순서로 짰다</text>
+  <rect x="114" y="222" width="224" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4" opacity="0.45"/>
   <g fill="none" stroke="currentColor" stroke-width="2">
-    <rect x="140" y="196" width="86" height="26" rx="6"/>
-    <rect x="140" y="240" width="86" height="26" rx="6"/>
+    <rect x="120" y="228" width="88" height="58" rx="6"/>
+    <rect x="244" y="228" width="88" height="58" rx="6"/>
   </g>
-  <g fill="currentColor" font-size="11.5" text-anchor="middle">
-    <text x="183" y="213">다음 장면</text>
-    <text x="183" y="257">동작</text>
+  <line x1="130" y1="270" x2="198" y2="270" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+  <path d="M174 254 L188 254 L186 270 L176 270 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.3">
+    <path d="M146 240 L146 246"/>
+    <path d="M138 246 L154 246"/>
+    <path d="M138 246 L138 260"/>
+    <path d="M154 246 L154 260"/>
   </g>
-  <path d="M183 224 L183 238" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#d2)"/>
-  <path d="M236 196 L246 196 L246 266 L236 266" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
-  <text x="258" y="235" fill="currentColor" font-size="11.5">한 번에 같이 다듬는다</text>
-  <text x="440" y="207" fill="currentColor" font-size="11.5">OpenWAM</text>
-  <text x="440" y="225" fill="currentColor" font-size="10" opacity="0.7">통제 실험 결론 — 이 방식이 제일 낫다</text>
+  <text x="256" y="254" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.12  -0.38</text>
+  <text x="256" y="272" fill="currentColor" font-size="9.5" font-family="ui-monospace, monospace" opacity="0.8">0.04   0.51  …</text>
+  <path d="M212 257 L240 257" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#d2)"/>
+  <path d="M342 257 L374 257" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#d2)"/>
+  <text x="382" y="261" fill="currentColor" font-size="11">로봇</text>
+  <text x="14" y="261" fill="currentColor" font-size="12">동시</text>
+  <text x="14" y="279" fill="currentColor" font-size="10" opacity="0.6">한 번에 같이</text>
+  <text x="430" y="251" fill="currentColor" font-size="11.5">OpenWAM</text>
+  <text x="430" y="269" fill="currentColor" font-size="10" opacity="0.6">통제 실험 결론 — 이 방식이 제일 낫다</text>
+  <line x1="14" y1="318" x2="706" y2="318" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
+  <text x="14" y="340" fill="currentColor" font-size="11.5" opacity="0.7">순서가 무엇이든 로봇으로 나가는 것은 동작, 곧 관절값 한 묶음이다.</text>
 </svg>
 
 순서가 무엇이든 공통점은 하나입니다. **동작이 혼자 나오지 않습니다.** 같이 만들어진 장면이 근거로 붙습니다.
@@ -231,32 +259,76 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 
 [DreamZero](https://arxiv.org/abs/2602.15922)의 해법이 간단합니다. **채점 기준을 데이터 출처마다 다르게 둡니다.**
 
-<svg viewBox="0 0 720 216" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="로봇 시연은 영상 예측과 동작 예측을 둘 다 채점하고, 사람 영상은 관절값이 없어서 영상 예측만 채점한다">
+<svg viewBox="0 0 720 258" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="로봇 시연은 영상 예측과 동작 예측을 둘 다 채점하고, 사람 영상은 관절값에 정답이 없어서 동작 예측을 채점에서 뺀다">
   <title>데이터 출처마다 다른 채점 기준</title>
-  <defs>
-    <marker id="d1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
-    </marker>
-  </defs>
-  <g fill="currentColor" font-size="11" opacity="0.65" text-anchor="middle">
-    <text x="250" y="24">영상 예측</text>
-    <text x="380" y="24">동작 예측</text>
+  <text x="14" y="26" fill="currentColor" font-size="12.5">로봇 시연</text>
+  <text x="14" y="44" fill="currentColor" font-size="10" opacity="0.6">관절값이 붙어 있다</text>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="40" cy="100" r="11"/>
+    <path d="M40 111 L40 142"/>
+    <path d="M40 142 L28 162"/>
+    <path d="M40 142 L52 162"/>
+    <path d="M40 120 L72 128"/>
   </g>
-  <line x1="14" y1="36" x2="706" y2="36" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-  <text x="14" y="76" fill="currentColor" font-size="12.5">로봇 시연</text>
-  <text x="14" y="94" fill="currentColor" font-size="10" opacity="0.6">관절값이 붙어 있다</text>
-  <circle cx="250" cy="80" r="9" fill="currentColor" opacity="0.85"/>
-  <circle cx="380" cy="80" r="9" fill="currentColor" opacity="0.85"/>
-  <text x="440" y="84" fill="currentColor" font-size="11.5">둘 다 채점한다</text>
-  <line x1="14" y1="108" x2="706" y2="108" stroke="currentColor" stroke-width="1" opacity="0.15"/>
-  <text x="14" y="148" fill="currentColor" font-size="12.5">사람 영상</text>
-  <text x="14" y="166" fill="currentColor" font-size="10" opacity="0.6">관절값이 없다</text>
-  <circle cx="250" cy="152" r="9" fill="currentColor" opacity="0.85"/>
-  <circle cx="380" cy="152" r="9" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.6"/>
-  <line x1="373" y1="159" x2="387" y2="145" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
-  <text x="440" y="156" fill="currentColor" font-size="11.5">동작은 채점에서 뺀다</text>
-  <line x1="14" y1="182" x2="706" y2="182" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
-  <text x="14" y="204" fill="currentColor" font-size="11.5" opacity="0.7">정답이 없는 항목만 빼면 된다. 그래서 라벨 없는 영상이 그대로 재료가 된다.</text>
+  <rect x="171" y="54" width="60" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/>
+  <rect x="76" y="62" width="250" height="112" rx="6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <rect x="90" y="76" width="52" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"/>
+  <line x1="94" y1="100" x2="138" y2="100" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+  <path d="M122 89 L132 89 L131 100 L123 100 Z" fill="none" stroke="currentColor" stroke-width="1.1"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.1">
+    <path d="M106 81 L106 86"/>
+    <path d="M100 86 L112 86"/>
+    <path d="M100 86 L100 96"/>
+    <path d="M112 86 L112 96"/>
+  </g>
+  <text x="164" y="96" fill="currentColor" font-size="11">영상 예측</text>
+  <path d="M266 90 L272 96 L284 84" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="84" y1="118" x2="318" y2="118" stroke="currentColor" stroke-width="1" opacity="0.18"/>
+  <rect x="90" y="130" width="52" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"/>
+  <g fill="currentColor" font-size="8.5" font-family="ui-monospace, monospace" text-anchor="middle" opacity="0.8">
+    <text x="116" y="144">0.12</text>
+    <text x="116" y="155">-0.38</text>
+  </g>
+  <text x="164" y="150" fill="currentColor" font-size="11">동작 예측</text>
+  <path d="M266 144 L272 150 L284 138" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="76" y="196" fill="currentColor" font-size="11.5">둘 다 채점한다</text>
+  <line x1="360" y1="20" x2="360" y2="206" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.25"/>
+  <text x="376" y="26" fill="currentColor" font-size="12.5">사람 영상</text>
+  <text x="376" y="44" fill="currentColor" font-size="10" opacity="0.6">관절값이 없다</text>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="402" cy="100" r="11"/>
+    <path d="M402 111 L402 142"/>
+    <path d="M402 142 L390 162"/>
+    <path d="M402 142 L414 162"/>
+    <path d="M402 120 L434 128"/>
+  </g>
+  <rect x="533" y="54" width="60" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/>
+  <rect x="438" y="62" width="250" height="112" rx="6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <rect x="452" y="76" width="52" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"/>
+  <line x1="456" y1="100" x2="500" y2="100" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+  <path d="M484 89 L494 89 L493 100 L485 100 Z" fill="none" stroke="currentColor" stroke-width="1.1"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.1">
+    <path d="M468 81 L468 86"/>
+    <path d="M462 86 L474 86"/>
+    <path d="M462 86 L462 96"/>
+    <path d="M474 86 L474 96"/>
+  </g>
+  <text x="526" y="96" fill="currentColor" font-size="11">영상 예측</text>
+  <path d="M628 90 L634 96 L646 84" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="446" y1="118" x2="680" y2="118" stroke="currentColor" stroke-width="1" opacity="0.18"/>
+  <rect x="452" y="130" width="52" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.5"/>
+  <g fill="currentColor" font-size="8.5" text-anchor="middle" opacity="0.5">
+    <text x="478" y="144">정답</text>
+    <text x="478" y="155">없음</text>
+  </g>
+  <text x="526" y="150" fill="currentColor" font-size="11" opacity="0.55">동작 예측</text>
+  <g stroke="currentColor" stroke-width="1.8" opacity="0.5" stroke-linecap="round">
+    <line x1="630" y1="138" x2="644" y2="152"/>
+    <line x1="644" y1="138" x2="630" y2="152"/>
+  </g>
+  <text x="438" y="196" fill="currentColor" font-size="11.5">동작 예측은 채점에서 뺀다</text>
+  <line x1="14" y1="222" x2="706" y2="222" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
+  <text x="14" y="244" fill="currentColor" font-size="11.5" opacity="0.7">정답이 없는 항목만 채점에서 빼면 된다. 그래서 라벨 없는 영상이 그대로 재료가 된다.</text>
 </svg>
 
 정답이 없는 항목은 채점에서 빼면 됩니다. 그래서 라벨 없는 영상도 **장면 칸을 키우는 데는 그대로 쓰입니다.** 이 방식으로 다른 로봇과 사람의 영상만 가지고 처음 보는 과제 성능을 42% 상대 개선했고, 새 로봇으로 옮길 때는 30분치 데이터로 붙였습니다. [OpenWAM](https://arxiv.org/abs/2609.07398)은 아예 1인칭 사람 영상과 로봇 영상 약 6,400시간으로 사전학습했습니다.
