@@ -17,11 +17,68 @@ draft: true
 
 [2편](/ko/posts/vla-failure-signatures/)에서 본 세 가지도 전부 이 틀 안에 있습니다. 다른 건 **관절값을 만들어내는 방식** 하나뿐입니다.
 
-| 이름 | 무엇의 줄임말인가 | 동작을 어떻게 만드나 |
-|---|---|---|
-| **VQ-BeT** | Vector-Quantized Behavior Transformer | 동작 사전을 미리 만들어두고 매 순간 하나를 고릅니다. 객관식입니다 |
-| **Diffusion Policy** | 줄임말이 아닙니다. 확산(diffusion) 모델을 정책으로 쓴 것 | 잡음 덩어리에서 시작해 조금씩 다듬어 궤적을 깎아냅니다 |
-| **ACT** | Action Chunking with Transformers | 한 스텝이 아니라 **미래 한 구간을 통째로** 내놓습니다 |
+| 이름 | 동작을 어떻게 만드나 |
+|---|---|
+| **VQ-BeT** (Vector-Quantized Behavior Transformer) | 동작 사전을 미리 만들어두고 매 순간 하나를 고릅니다. 객관식입니다 |
+| **Diffusion Policy** (줄임말이 아니라, 확산 모델을 정책으로 쓴 것) | 잡음 덩어리에서 시작해 조금씩 다듬어 궤적을 깎아냅니다 |
+| **ACT** (Action Chunking with Transformers) | 한 스텝이 아니라 **미래 한 구간을 통째로** 내놓습니다 |
+
+<svg viewBox="0 0 720 152" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="VQ-BeT는 미리 만든 동작 목록에서 하나를 고르고, Diffusion Policy는 잡음에서 궤적을 다듬어내고, ACT는 미래 한 구간을 통째로 내놓는다">
+  <title>동작을 만들어내는 세 가지 방식</title>
+  <defs>
+    <marker id="m3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+  <g stroke="currentColor" stroke-width="1" opacity="0.18">
+    <line x1="240" y1="10" x2="240" y2="142"/>
+    <line x1="480" y1="10" x2="480" y2="142"/>
+  </g>
+  <g fill="currentColor" font-size="12">
+    <text x="14" y="22">VQ-BeT — 고른다</text>
+    <text x="254" y="22">Diffusion Policy — 다듬는다</text>
+    <text x="494" y="22">ACT — 통째로 낸다</text>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="1.4">
+    <rect x="16" y="40" width="36" height="22" rx="3"/>
+    <rect x="58" y="40" width="36" height="22" rx="3"/>
+    <rect x="100" y="40" width="36" height="22" rx="3"/>
+    <rect x="16" y="70" width="36" height="22" rx="3"/>
+    <rect x="100" y="70" width="36" height="22" rx="3"/>
+  </g>
+  <rect x="58" y="70" width="36" height="22" rx="3" fill="currentColor" opacity="0.85"/>
+  <path d="M142 81 L170 81" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#m3)"/>
+  <text x="178" y="85" fill="currentColor" font-size="11">동작</text>
+  <path d="M258 88 L266 62 L274 92 L282 66 L290 90 L298 64 L306 93 L314 68 L322 86 L330 70" fill="none" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>
+  <path d="M338 78 L362 78" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#m3)"/>
+  <path d="M370 90 C 396 90 400 60 428 60 C 450 60 456 80 462 86" fill="none" stroke="currentColor" stroke-width="1.8"/>
+  <line x1="498" y1="80" x2="702" y2="80" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.4">
+    <circle cx="522" cy="80" r="3.2"/>
+    <circle cx="544" cy="80" r="3.2"/>
+    <circle cx="566" cy="80" r="3.2"/>
+    <circle cx="588" cy="80" r="3.2"/>
+    <circle cx="610" cy="80" r="3.2"/>
+    <circle cx="632" cy="80" r="3.2"/>
+    <circle cx="654" cy="80" r="3.2"/>
+    <circle cx="676" cy="80" r="3.2"/>
+    <circle cx="698" cy="80" r="3.2"/>
+  </g>
+  <circle cx="500" cy="80" r="3.6" fill="currentColor"/>
+  <path d="M522 64 L522 56 L698 56 L698 64" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <text x="610" y="48" fill="currentColor" font-size="10.5" text-anchor="middle" opacity="0.8">이 구간을 한 번에</text>
+  <g fill="currentColor" font-size="10" opacity="0.6">
+    <text x="16" y="108">동작 사전</text>
+    <text x="258" y="110">잡음</text>
+    <text x="400" y="110">궤적</text>
+    <text x="494" y="104">현재</text>
+  </g>
+  <g fill="currentColor" font-size="10.5" opacity="0.75">
+    <text x="14" y="136">미리 만든 목록에서 하나를 고른다</text>
+    <text x="254" y="136">잡음에서 시작해 궤적으로 깎아낸다</text>
+    <text x="494" y="136">다음 한 구간을 통째로 내놓는다</text>
+  </g>
+</svg>
 
 방식은 달라도 **공통점이 하나 있습니다. 그림에서 동작으로 한 번에 갑니다.** 중간에 아무것도 없습니다.
 
@@ -118,11 +175,11 @@ NVIDIA가 [이 범주에 이름을 붙이면서](https://developer.nvidia.com/bl
 
 정답이 없는 항목은 채점에서 빼면 됩니다. 그래서 라벨 없는 영상도 **장면 칸을 키우는 데는 그대로 쓰입니다.** 이 방식으로 다른 로봇과 사람의 영상만 가지고 처음 보는 과제 성능을 42% 상대 개선했고, 새 로봇으로 옮길 때는 30분치 데이터로 붙였습니다. [OpenWAM](https://arxiv.org/abs/2609.07398)은 아예 1인칭 사람 영상과 로봇 영상 약 6,400시간으로 사전학습했습니다.
 
-## 언제 써볼 수 있나
+## 지금 어디까지 왔나
 
-**아직 제품이 아닙니다.** 연구 단계이고, 지금 손댈 수 있는 것은 공개된 코드와 체크포인트까지입니다.
+연구 단계입니다. 논문과 코드, 사전학습 체크포인트까지는 공개돼 있고 제품으로 나온 것은 아직 없습니다.
 
-그 앞에서 숫자를 먼저 봐야 합니다. GE-Act 2.0이 공동학습 데이터를 **300시간에서 30,000시간으로 100배** 늘려 결과를 냈습니다.
+숫자부터 보겠습니다. GE-Act 2.0이 공동학습 데이터를 **300시간에서 30,000시간으로 100배** 늘려 결과를 냈습니다.
 
 | 하드웨어 | 300시간 | 30,000시간 |
 |---|---|---|
