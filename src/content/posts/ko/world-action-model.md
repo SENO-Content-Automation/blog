@@ -20,7 +20,7 @@ draft: true
 | 이름 | 동작을 어떻게 만드나 |
 |---|---|
 | **VQ-BeT** (Vector-Quantized Behavior Transformer) | 동작 사전을 미리 만들어두고 매 순간 하나를 고릅니다. 객관식입니다 |
-| **Diffusion Policy** (줄임말이 아니라, 확산 모델을 정책으로 쓴 것) | 잡음 덩어리에서 시작해 조금씩 다듬어 궤적을 깎아냅니다 |
+| **Diffusion Policy** (확산 모델을 정책으로 쓴 것) | 잡음 덩어리에서 시작해 조금씩 다듬어 궤적을 깎아냅니다 |
 | **ACT** (Action Chunking with Transformers) | 한 스텝이 아니라 **미래 한 구간을 통째로** 내놓습니다 |
 
 <svg viewBox="0 0 720 152" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="VQ-BeT는 미리 만든 동작 목록에서 하나를 고르고, Diffusion Policy는 잡음에서 궤적을 다듬어내고, ACT는 미래 한 구간을 통째로 내놓는다">
@@ -86,62 +86,74 @@ draft: true
 
 WAM이 바꾼 것이 정확히 그 지점입니다. 동작만 내놓지 않고 **"그러면 다음에 이렇게 보일 것"을 같이 만듭니다.** 그리고 동작 쪽이 그 장면을 보고 나옵니다.
 
-<svg viewBox="0 0 720 346" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="기존 정책은 그림에서 동작으로 한 번에 가고, WAM은 다음 장면과 동작을 같이 만들되 동작이 그 장면을 보고 나온다">
+<svg viewBox="0 0 720 352" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="지금까지는 카메라 그림을 정책에 넣어 관절 명령을 바로 얻었고, WAM은 그리퍼가 컵을 잡은 다음 장면을 같이 만들고 그 장면을 보고 동작을 만들어 관절 명령을 낸다">
   <title>기존 정책과 WAM의 구조</title>
   <defs>
     <marker id="w3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
     </marker>
   </defs>
-  <text x="14" y="26" fill="currentColor" font-size="11" opacity="0.65">지금까지 — 그림에서 동작으로 바로</text>
-  <g fill="none" stroke="currentColor" stroke-width="1.6">
-    <rect x="14" y="40" width="150" height="54" rx="6"/>
-    <rect x="248" y="40" width="200" height="54" rx="6"/>
-    <rect x="532" y="40" width="150" height="54" rx="6"/>
+  <g opacity="0.55">
+    <text x="14" y="30" fill="currentColor" font-size="11">지금까지 — 그림을 보고 동작을 바로 낸다</text>
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="14" y="42" width="100" height="62" rx="4"/>
+      <rect x="168" y="48" width="280" height="50" rx="6"/>
+      <rect x="492" y="48" width="214" height="50" rx="6"/>
+    </g>
+    <line x1="22" y1="92" x2="106" y2="92" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+    <path d="M82 72 L98 72 L96 92 L84 92 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.3">
+      <path d="M44 50 L44 60"/>
+      <path d="M36 60 L52 60"/>
+      <path d="M36 60 L36 76"/>
+      <path d="M52 60 L52 76"/>
+    </g>
+    <text x="182" y="78" fill="currentColor" font-size="13">정책</text>
+    <text x="232" y="78" fill="currentColor" font-size="10" opacity="0.75">Diffusion Policy · VQ-BeT · ACT</text>
+    <text x="506" y="68" fill="currentColor" font-size="12">관절 명령</text>
+    <text x="506" y="88" fill="currentColor" font-size="10" font-family="ui-monospace, monospace" opacity="0.75">0.12  -0.38  0.04  …</text>
+    <g fill="none" stroke="currentColor" stroke-width="1.4">
+      <path d="M122 73 L162 73" marker-end="url(#w3)"/>
+      <path d="M456 73 L486 73" marker-end="url(#w3)"/>
+    </g>
   </g>
-  <g fill="currentColor" font-size="13">
-    <text x="28" y="66">카메라 그림</text>
-    <text x="262" y="66">정책</text>
-    <text x="546" y="72">관절 명령</text>
+  <text x="14" y="146" fill="currentColor" font-size="11" opacity="0.7">WAM — 다음 장면을 같이 만들고, 그것을 보고 동작을 낸다</text>
+  <rect x="168" y="158" width="280" height="136" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4" opacity="0.45"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="14" y="195" width="100" height="62" rx="4"/>
+    <rect x="180" y="252" width="250" height="34" rx="6"/>
+    <rect x="492" y="244" width="214" height="50" rx="6"/>
   </g>
-  <g fill="currentColor" font-size="10.5" opacity="0.7">
-    <text x="28" y="84">+ 무엇을 하라는 지시</text>
-    <text x="262" y="84">Diffusion Policy · VQ-BeT · ACT</text>
+  <line x1="22" y1="245" x2="106" y2="245" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+  <path d="M82 225 L98 225 L96 245 L84 245 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.3">
+    <path d="M44 203 L44 213"/>
+    <path d="M36 213 L52 213"/>
+    <path d="M36 213 L36 229"/>
+    <path d="M52 213 L52 229"/>
   </g>
+  <rect x="180" y="168" width="100" height="62" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/>
+  <line x1="188" y1="218" x2="272" y2="218" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+  <path d="M248 198 L264 198 L262 218 L250 218 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M256 176 L256 182"/>
+    <path d="M242 182 L270 182"/>
+    <path d="M242 182 L242 212"/>
+    <path d="M270 182 L270 212"/>
+  </g>
+  <text x="292" y="188" fill="currentColor" font-size="11.5">다음 장면</text>
+  <text x="292" y="206" fill="currentColor" font-size="10" opacity="0.6">이렇게 될 것이다</text>
+  <path d="M230 234 L230 248" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#w3)"/>
+  <text x="240" y="247" fill="currentColor" font-size="10" opacity="0.75">이 장면을 보고</text>
+  <text x="194" y="274" fill="currentColor" font-size="12">동작을 만든다</text>
+  <text x="506" y="264" fill="currentColor" font-size="12" opacity="0.8">관절 명령</text>
+  <text x="506" y="284" fill="currentColor" font-size="10" font-family="ui-monospace, monospace" opacity="0.6">0.12  -0.38  0.04  …</text>
   <g fill="none" stroke="currentColor" stroke-width="1.4">
-    <path d="M164 67 L244 67" marker-end="url(#w3)"/>
-    <path d="M448 67 L528 67" marker-end="url(#w3)"/>
+    <path d="M122 226 L162 226" marker-end="url(#w3)"/>
+    <path d="M434 269 L486 269" marker-end="url(#w3)"/>
   </g>
-  <text x="14" y="136" fill="currentColor" font-size="11" opacity="0.65">WAM — 장면과 동작을 같이 만든다</text>
-  <rect x="248" y="142" width="200" height="134" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4" opacity="0.45"/>
-  <g fill="none" stroke="currentColor" stroke-width="1.6">
-    <rect x="14" y="182" width="150" height="54" rx="6"/>
-    <rect x="258" y="152" width="180" height="44" rx="6"/>
-    <rect x="258" y="222" width="180" height="44" rx="6"/>
-    <rect x="532" y="217" width="150" height="54" rx="6"/>
-  </g>
-  <g fill="currentColor" font-size="13">
-    <text x="28" y="208">카메라 그림</text>
-    <text x="270" y="172">다음 장면을 그린다</text>
-    <text x="270" y="249">동작을 만든다</text>
-    <text x="546" y="249">관절 명령</text>
-  </g>
-  <g fill="currentColor" font-size="10.5" opacity="0.7">
-    <text x="28" y="226">+ 무엇을 하라는 지시</text>
-    <text x="270" y="188">이렇게 될 것이다</text>
-  </g>
-  <g fill="none" stroke="currentColor" stroke-width="1.4">
-    <path d="M164 209 L244 209" marker-end="url(#w3)"/>
-    <path d="M348 198 L348 218" marker-end="url(#w3)"/>
-    <path d="M438 244 L528 244" marker-end="url(#w3)"/>
-  </g>
-  <text x="358" y="214" fill="currentColor" font-size="10.5" opacity="0.75">이 장면을 보고</text>
-  <g fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.6">
-    <path d="M348 276 L348 296" marker-end="url(#w3)"/>
-  </g>
-  <text x="360" y="294" fill="currentColor" font-size="10.5" opacity="0.75">이 중간 장면은 밖에서 볼 수 있다</text>
-  <line x1="14" y1="312" x2="706" y2="312" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
-  <text x="14" y="332" fill="currentColor" font-size="11.5" opacity="0.7">더 생긴 것은 장면 칸 하나다. 동작은 그 장면을 보고 나온다.</text>
+  <line x1="14" y1="316" x2="706" y2="316" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
+  <text x="14" y="338" fill="currentColor" font-size="11.5" opacity="0.7">더 생긴 것은 가운데 장면 하나다. 동작은 그 장면을 보고 나온다.</text>
 </svg>
 
 사람이 컵을 집을 때와 같습니다. 머릿속 그림을 다 그린 다음에 팔을 뻗는 게 아니라, 그리면서 같이 움직입니다.
