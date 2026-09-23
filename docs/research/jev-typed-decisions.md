@@ -176,6 +176,17 @@ elif action.choice == "approve_transfer":
 - 정책 두 개: Strict(action ≥ 0.70), Permissive(action ≥ 0.85). 같은 판정 결과가 정책에 따라 다르게 라우팅됩니다
 - **분모 15는 성능 평가가 아니라 시연입니다.** 정밀도·재현율 수치는 없습니다
 
+### 2-6. 명령 분해의 성능 — 공개 수치가 없습니다 (2026-09-23 추가)
+
+- **Intent routing 패턴** ([patterns/intent-routing](https://docs.typesafe.ai/patterns/intent-routing)): 정확도·데이터셋·지연 수치 **없음** [S]. 예시는 고객 문의를 의도 4종 × 복잡도로 분류하고 의도 confidence < 0.5면 사람에게 넘깁니다
+- **스마트홈 데모**: 수치 없음, 소스 미공개 (§2-3)
+- **Function calling 쿡북** ([cookbooks/function_calling](https://docs.typesafe.ai/cookbooks/function_calling)) [S]
+  - 함수 10개, 채울 인자 합 28개, 시험 명령 **14개**. 데이터는 1분봉 156,780개
+  - 보고된 것은 **confidence 0.53~1.00**이지 정답률이 아닙니다. 14개 중 몇 개가 맞았는지는 요약 도구 경유로 확인 못 함 [U]
+  - 인자 채우기: 고정 목록(Literal)은 Choice/Set/Flag 질문으로 바꾸고, **자유 텍스트·숫자·날짜는 함수 기본값을 유지**한다는 취지 — 원문 대조 필요 [U]
+  - 숫자 인자는 Jev가 만들지 못하고, 코드가 미리 뽑은 후보 중에서 고르게 하는 쿡북이 따로 있습니다: `Pre-parsed value extraction` — 이번에 안 읽음 [U]
+- 로봇 명령("30cm 앞으로")처럼 **숫자가 핵심 인자인 명령**을 어떻게 다루는지는 확인 안 됨 [U]
+
 ---
 
 ## 3. 공개된 숫자 — 전부 회사 발표
@@ -295,7 +306,11 @@ TypeSafe 공식 자료에는 **로봇·제조·산업 제어·자율주행 언�
   1. TypeSafe에 브랜드·프레스 키트 페이지가 있는가 — 못 찾음
   2. 이 블로그는 무채색 사이트입니다(`WORKFLOW.md` §8은 다이어그램 규칙이지만 사이트 원칙이 같음). 컬러 로고를 넣을지, 단색으로 넣을지는 사람이 정합니다
   3. **로고를 다시 그리지 않습니다.** 공식 파일을 그대로 쓰고 출처를 캡션에 답니다
-- 사람 PC에서 폴더를 연결하면 그쪽 브라우저·셸로 받아올 수 있습니다
+- 후보 URL (typesafe.ai 홈페이지에서 요약 도구가 뽑은 것 — 열어서 무엇인지 확인 필요) [U]
+  - og:image `https://framerusercontent.com/images/RtIGTDwO43jR4ZDilesXiR5znc.jpg`
+  - 워드마크로 추정 `https://framerusercontent.com/images/yfB1VlQapdkfInBgB2VX1cDehHs.png`
+  - 프레스 키트·브랜드 가이드 페이지: 없음
+- 사람이 직접 받아 대화에 올리기로 함 (2026-09-23)
 
 ---
 
