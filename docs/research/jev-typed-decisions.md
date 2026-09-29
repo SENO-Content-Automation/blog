@@ -329,3 +329,8 @@ TypeSafe 공식 자료에는 **로봇·제조·산업 제어·자율주행 언�
 11. **[U] 로봇 제어 주기 수치** — 이번 조사 범위 밖. 쓰려면 별도 1차 출처 필요
 12. **[U] 로고 파일** — §6
 13. **2차 기사(Forbes 2026-09-15, TechCrunch 2026-09-18, The Register 2026-09-16)** — 근거 아님. The Register 링크는 404
+14. **[S] 초안에 쓴 인용 중 문자열 검색으로 받지 않은 것** (2026-09-29 초안 수정분) — 게이트 3 전 원문 대조 필요
+    - 블로그 `"~5x more expensive than input tokens"` (LLM 출력 토큰 가격) — 첫 요약 추출에서만 나옴
+    - AI primer `"Large-scale automation will be dominated by AI-to-AI and AI-to-software interactions, so the machine interface matters more than the chat interface."`
+    - AI primer `"RLHF teaches a model to say things that people prefer"` / `confident-sounding hallucinations`
+    - Noul 문서 요청·응답 JSON 예시 (`input_tokens: 360`, `output_tokens: 39`)
