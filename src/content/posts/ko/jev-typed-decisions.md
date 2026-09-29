@@ -129,14 +129,10 @@ C로 치면 Choice는 `enum`을 돌려주는 함수입니다. 이 함수가 `7`�
 
 ## "환각 0%"는 첫 층만 증명한다
 
-0% 문장을 끝까지 옮기면 이렇습니다.
-
 > "Our number is not empirical. Schema matching is guaranteed, thus we can confidently add 0% into the plots."
 
-[소개 글](https://typesafe.ai/blog/introducing-system-one-models-and-jev)이 말하는 환각은 스키마 밖으로 나간 문자열입니다. 선택지 안에서 틀린 것을 고르면 이 정의로는 환각이 아닙니다. 0%는 **형식 층에 대한 정의**이고 측정값이 아닙니다.
+[소개 글](https://typesafe.ai/blog/introducing-system-one-models-and-jev)의 환각은 스키마 밖으로 나간 문자열입니다. 선택지 안에서 틀린 것을 고르면 이 정의로는 환각이 아닙니다. 0%는 **형식 층에 대한 정의**이고 측정값이 아닙니다.
 
-나머지 두 층은 회사 문서가 먼저 비워 둡니다. [Jev 1.13 한계 문서](https://docs.typesafe.ai/model-jaggedness/jev-1.13)는 `"Jev is not a calculator."`라고 적고, 여러 단계를 거치는 질문에서 정확도가 떨어진다고 씁니다. 관련된 질문 사이의 수학적 관계도 보장하지 않는다고 하고, 예로 P(A) + P(not A) = 1을 듭니다.
+나머지 두 층은 회사 문서가 먼저 비워 둡니다. [Jev 1.13 한계 문서](https://docs.typesafe.ai/model-jaggedness/jev-1.13)는 `"Jev is not a calculator."`라고 적고, 질문끼리의 확률 관계(P(A) + P(not A) = 1)도 보장하지 않는다고 씁니다. 보정 지표는 소개 글과 문서 어디에도 없었습니다. 확인되는 것은 보정을 목표로 학습했다는 것까지입니다.
 
-Choice와 Score에 붙는 confidence도 보정의 증거가 아닙니다. [confidence 문서](https://docs.typesafe.ai/confidence)의 식은 선택지 셋일 때 `(3 × 최대 확률 − 1) / 2`입니다. 최대 확률이 0.8이면 confidence는 0.7입니다. 분포가 한쪽에 몰린 정도를 옮긴 값이고, 그 0.8이 실제로 열에 여덟 맞는지와는 별개입니다.
-
-보정 지표(ECE, 신뢰도 다이어그램)는 소개 글과 문서 어디에도 없었습니다. 확인되는 것은 보정을 목표로 학습했다는 것까지입니다.
+다음에 더 좋은 글로 찾아뵙겠습니다. 감사합니다.
