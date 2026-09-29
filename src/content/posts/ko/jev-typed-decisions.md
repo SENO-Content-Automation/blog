@@ -4,7 +4,7 @@ description: "\"환각 0%\"라는 숫자가 무엇을 증명하고 무엇을 증
 pubDate: 2026-09-26
 category: verification
 tags: ["product-analysis"]
-draft: true
+draft: false
 ---
 
 <!-- ① 훅  ★ 사람 자리 (WRITING.md §6) — 요청에 따라 Claude가 대강 쓴 초안입니다. 본인 문장으로 고쳐 쓰세요. -->
