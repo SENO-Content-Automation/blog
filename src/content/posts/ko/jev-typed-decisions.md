@@ -33,35 +33,97 @@ Jev는 TypeSafe가 2026년 9월 15일 공개한 모델입니다. 회사는 이�
 | Choice | 정해 둔 선택지 중 하나 (최대 255개) | 고른 값, 선택지별 확률, confidence |
 | Score | 2~10단계로 서술한 등급 | 등급, 등급별 확률, confidence |
 
-답은 한 번에 나옵니다. 소개 글의 표현으로는 `"Generates all outputs in parallel instead of autoregressively generating by token."` 응답 시간은 같은 글에서 70–500ms라고 밝혔습니다.
+### 실제로 주고받는 것
 
-문서가 권하는 쓰는 법은 한 줄입니다. [`"Keep control flow, deterministic rules, and side effects in code."`](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) 분기와 실행은 코드가 맡고, Jev는 좁은 판단 하나를 돌려줍니다.
+[Noul 문서](https://docs.typesafe.ai/primitives/noul)의 예시를 그대로 옮깁니다. 고객 메시지 한 줄을 상태로 넣고, 예/아니오 질문 두 개를 이름을 붙여 보냅니다.
 
-이런 모델이 지금 나온 이유도 소개 글에 있습니다. 소프트웨어가 LLM을 부르면 돌아오는 건 문자열이고, 그 문자열은 무엇이든 될 수 있습니다.
+```json
+{
+  "state": "I have asked three times now. Can I please just talk to a real person?",
+  "model": "jev-latest",
+  "questions": {
+    "is_human_escalation": {
+      "type": "noul",
+      "instructions": "Is the customer asking for a human agent?"
+    },
+    "is_repeat_contact": {
+      "type": "noul",
+      "instructions": "Has the customer contacted support about this before?",
+      "criteria": {
+        "true": "Mentions a prior attempt, ticket, or that they have asked before",
+        "false": "No sign of any previous contact"
+      }
+    }
+  }
+}
+```
+
+돌아오는 것은 질문 이름마다 숫자 하나입니다.
+
+```json
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "is_human_escalation": { "type": "noul", "noul": 0.99 },
+    "is_repeat_contact":   { "type": "noul", "noul": 0.93 }
+  },
+  "usage": { "input_tokens": 360, "output_tokens": 39 }
+}
+```
+
+응답에는 문장이 없습니다. 코드는 `answers.is_human_escalation.noul`을 읽어 바로 분기합니다. 분기 기준을 정하는 것도 코드입니다. [설계 가이드](https://docs.typesafe.ai/concepts/how-to-build-with-system-one)의 첫 원칙이 `"Keep control flow, deterministic rules, and side effects in code."`입니다.
+
+## 기존 LLM과 무엇이 다른가
+
+TypeSafe가 공개한 차이는 출력, 생성 방식, 후학습 세 가지입니다. 파라미터 수나 내부 구조는 공개하지 않았습니다.
+
+| | 일반 LLM | Jev |
+|---|---|---|
+| 출력 | 문자열 | 정해 둔 형식의 값과 확률 |
+| 생성 | 토큰을 하나씩 순서대로 | `"Generates all outputs in parallel"` |
+| 후학습 | RLHF | RLCD (Reinforcement Learning for Calibrated Decisions) |
+| 출력 토큰 가격 | `"~5x more expensive than input tokens"` | `"FREE (too cheap to meter)"` |
+
+생성과 가격 행은 [소개 글](https://typesafe.ai/blog/introducing-system-one-models-and-jev)의 표현입니다. 같은 글은 응답 시간을 70–500ms, 비교한 프런티어 모델을 3~329초로 적었습니다.
+
+후학습의 차이는 [AI primer](https://docs.typesafe.ai/introduction/machine-learning-primer)가 설명합니다. `"RLHF teaches a model to say things that people prefer"`이고, 그 보상이 그럴듯한 환각을 키울 수 있다고 적습니다. RLCD에 대해서는 `"The model does not generate text. It returns decisions and probabilities."`라고 씁니다.
+
+이런 모델이 나온 이유도 같은 문서에 있습니다. `"Large-scale automation will be dominated by AI-to-AI and AI-to-software interactions, so the machine interface matters more than the chat interface."` 소개 글은 LLM이 돌려주는 문자열을 이렇게 설명합니다.
 
 > "Strings are flexible and can be anything: chat responses, code, hallucinations, refusals, or even type-safe structured values."
 
-Jev는 이 문자열을 없앴습니다. 코드는 파싱하지 않고 값을 바로 받습니다.
+Jev는 이 문자열을 없앴습니다. 받는 쪽 코드는 파싱하지 않고 값을 읽습니다.
 
 ## "맞다"에는 세 층이 있다
 
-C로 치면 Jev의 Choice는 이런 함수입니다.
+C로 치면 Choice는 `enum`을 돌려주는 함수입니다. 이 함수가 `7`을 돌려주는 일은 타입 규칙으로 막습니다. 멈춰야 할 때 `ACT_GO`를 돌려주는 일은 타입으로 못 막습니다. 확률이 붙으면 그 확률을 믿어도 되는가가 한 층 더 생깁니다.
 
-```c
-typedef enum { ACT_STOP, ACT_SLOW, ACT_GO } action_t;
+<svg viewBox="0 0 720 262" width="100%" style="max-width:720px;height:auto;display:block;margin:1.5rem 0" role="img" aria-label="형식, 정답, 보정의 세 층 중 환각 0퍼센트가 가리키는 것은 맨 위 형식 층 하나이고, 정답과 보정 층은 공개 근거가 없다">
+  <title>맞다의 세 층 — 환각 0%가 덮는 범위</title>
+  <g fill="none" stroke="currentColor" stroke-width="1.6">
+    <rect x="14" y="24" width="440" height="52" rx="6"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 5" opacity="0.6">
+    <rect x="14" y="92" width="440" height="52" rx="6"/>
+    <rect x="14" y="160" width="440" height="52" rx="6"/>
+  </g>
+  <text x="30" y="48" fill="currentColor" font-size="13">형식 — 답이 선택지 안에 있나</text>
+  <text x="30" y="66" fill="currentColor" font-size="10.5" opacity="0.7">스키마 일치로 구조적으로 보장</text>
+  <text x="30" y="116" fill="currentColor" font-size="13" opacity="0.75">정답 — 고른 선택지가 맞나</text>
+  <text x="30" y="134" fill="currentColor" font-size="10.5" opacity="0.6">사람이 매긴 정답 기준의 공개 수치 없음</text>
+  <text x="30" y="184" fill="currentColor" font-size="13" opacity="0.75">보정 — 0.8이라 하면 열에 여덟 맞나</text>
+  <text x="30" y="202" fill="currentColor" font-size="10.5" opacity="0.6">보정 지표 공개 없음</text>
+  <g fill="none" stroke="currentColor" stroke-width="1.6">
+    <path d="M470 24 L482 24 L482 76 L470 76"/>
+    <path d="M482 50 L498 50"/>
+  </g>
+  <text x="506" y="46" fill="currentColor" font-size="13">"환각 0%"가</text>
+  <text x="506" y="64" fill="currentColor" font-size="13">가리키는 범위</text>
+  <line x1="14" y1="228" x2="706" y2="228" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity="0.35"/>
+  <text x="14" y="248" fill="currentColor" font-size="11.5" opacity="0.7">0%가 덮는 것은 맨 위 층 하나다. 점선 두 층은 공개된 근거가 없다.</text>
+</svg>
 
-action_t decide(const state_t *s);  /* 셋 중 하나를 돌려준다 */
-```
-
-이 함수가 `7`을 돌려주는 일은 타입 규칙으로 막습니다. 멈춰야 할 때 `ACT_GO`를 돌려주는 일은 타입으로 못 막습니다. 그건 시험으로 잡습니다.
-
-확률까지 붙으면 층이 하나 더 생깁니다. TypeSafe의 [AI primer](https://docs.typesafe.ai/introduction/machine-learning-primer)는 보정(calibration)을 이렇게 정의합니다. `"Outcomes assigned a probability of 0.8 should occur about 80% of the time."`
-
-| 층 | 묻는 것 | Jev에서 |
-|---|---|---|
-| 형식 | 답이 선택지 안에 있나 | 구조적으로 보장 |
-| 정답 | 고른 선택지가 맞나 | 사람이 매긴 정답 기준의 공개 수치 없음 |
-| 보정 | 0.8이라고 한 것이 열에 여덟 맞나 | 보정 지표 공개 없음 |
+보정의 정의는 [AI primer](https://docs.typesafe.ai/introduction/machine-learning-primer)의 문장을 따랐습니다. `"Outcomes assigned a probability of 0.8 should occur about 80% of the time."`
 
 ## "환각 0%"는 첫 층만 증명한다
 
@@ -71,13 +133,11 @@ action_t decide(const state_t *s);  /* 셋 중 하나를 돌려준다 */
 
 [소개 글](https://typesafe.ai/blog/introducing-system-one-models-and-jev)이 말하는 환각은 스키마 밖으로 나간 문자열입니다. 선택지 안에서 틀린 것을 고르면 이 정의로는 환각이 아닙니다. 0%는 **형식 층에 대한 정의**이고 측정값이 아닙니다.
 
-나머지 두 층은 회사 문서가 먼저 비워 둡니다. [Jev 1.13 한계 문서](https://docs.typesafe.ai/model-jaggedness/jev-1.13)는 `"Jev is not a calculator."`라고 적습니다. 여러 단계를 거치는 질문에서 정확도가 떨어진다고도 적습니다.
+나머지 두 층은 회사 문서가 먼저 비워 둡니다. [Jev 1.13 한계 문서](https://docs.typesafe.ai/model-jaggedness/jev-1.13)는 `"Jev is not a calculator."`라고 적고, 여러 단계를 거치는 질문에서 정확도가 떨어진다고 씁니다. 관련된 질문 사이의 수학적 관계도 보장하지 않는다고 하고, 예로 P(A) + P(not A) = 1을 듭니다.
 
-같은 문서는 관련된 질문 사이의 수학적 관계도 보장하지 않는다고 씁니다. 예로 든 것이 P(A) + P(not A) = 1입니다. "A인가"와 "A가 아닌가"를 따로 물으면 두 확률의 합이 1이 아닐 수 있습니다.
+Choice와 Score에 붙는 confidence도 보정의 증거가 아닙니다. [confidence 문서](https://docs.typesafe.ai/confidence)의 식은 선택지 셋일 때 `(3 × 최대 확률 − 1) / 2`입니다. 최대 확률이 0.8이면 confidence는 0.7입니다. 분포가 한쪽에 몰린 정도를 옮긴 값이고, 그 0.8이 실제로 열에 여덟 맞는지와는 별개입니다.
 
-Choice와 Score에 붙는 confidence도 보정의 증거가 아닙니다. [confidence 문서](https://docs.typesafe.ai/confidence)의 식은 선택지 셋일 때 `(3 × 최대 확률 − 1) / 2`입니다. 최대 확률이 0.8이면 confidence는 0.7입니다. 분포가 한쪽에 몰린 정도를 0~1로 옮긴 값이고, 그 0.8이 실제로 열에 여덟 맞는지와는 별개입니다.
-
-같은 문서도 임계값을 정해 주지 않습니다. `"The correct threshold values depend on your domain and the performance of the model for your use case."` 보정 지표(ECE, 신뢰도 다이어그램)는 소개 글, 문서, 평가 사이트 어디에도 없었습니다. 확인되는 것은 보정을 목표로 학습했다는 것까지입니다. 소개 글은 이 학습법을 RLCD(Reinforcement Learning for Calibrated Decisions)라고 부릅니다.
+보정 지표(ECE, 신뢰도 다이어그램)는 소개 글, 문서, 평가 사이트 어디에도 없었습니다. 확인되는 것은 보정을 목표로 학습했다는 것까지입니다.
 
 ## 무엇이 증거로 안 되나
 
@@ -89,16 +149,6 @@ TypeSafe는 [Workflow evals](https://evals.typesafe.ai/)라는 비교 페이지�
 
 속도도 문서마다 다릅니다. 소개 글은 70–500ms, [설계 가이드](https://docs.typesafe.ai/concepts/how-to-build-with-system-one)는 `"about 100 ms"`, [사용 사례 페이지](https://docs.typesafe.ai/concepts/use-case-map)는 150ms입니다. 세 값 모두 측정 조건이 적혀 있지 않습니다.
 
-## 로봇 쪽 판단 기준
-
-TypeSafe 자료에는 로봇이 나오지 않습니다. 제어 루프에 가장 가까운 공개 사례는 Doom 데모입니다. 게임 상태를 텍스트로 넘겼고, 개발자는 [소개 글](https://typesafe.ai/blog/introducing-system-one-models-and-jev)에서 초당 10회 질의의 비용을 걱정했다고 적었습니다.
-
-문서 구조와 맞는 자리는 지각 모듈이 만든 JSON 위의 좁은 판단입니다. 자연어 명령을 정해 둔 스킬 목록 중 하나로 고르는 일이 그렇습니다. [스킬 추천 쿡북](https://docs.typesafe.ai/cookbooks/skill_suggestion)은 스킬 182개, 요청 488건에서 에이전트가 잘못 고른 비율이 16.8%에서 7.3%로 줄었다고 보고합니다. 소프트웨어 에이전트의 스킬이고, 로봇 스킬에서 나온 수치는 없습니다.
-
-맞지 않는 자리는 문서가 먼저 뺐습니다. 원시 센서 입력은 받지 않고, 계산은 코드로 하라고 하고, 다음 행동을 모델이 고르게 두지 않습니다(`"It does not generate code or choose its own next action."`).
-
-기본은 이렇습니다. Jev가 보장하는 것은 답이 선택지 밖으로 나가지 않는다는 것까지입니다. 고른 값이 맞는지, 질문끼리 앞뒤가 맞는지는 이 보장 밖에 있고, 문서의 구조에서 그 확인은 코드 쪽에 있습니다.
-
 ## 마무리
 
-Jev의 "환각 0%"는 스키마 일치에서 나온 정의상의 값이고, 회사도 측정값이 아니라고 적었습니다. 이 글은 형식·정답·보정의 세 층 중 공개 자료가 채운 것이 형식 하나라는 것을 문서 문장으로 따라갔습니다. 평가 페이지의 정확도는 다른 모델 둘의 답을 기준으로 삼았고, 보정 지표와 로봇에서 나온 수치는 아직 공개된 것이 없습니다.
+Jev는 문자열 대신 정해 둔 형식의 값과 확률을 돌려주는 모델이고, 흐름과 실행은 호출하는 코드에 남깁니다. 이 모델의 "환각 0%"는 스키마 일치에서 나온 정의상의 값이며, 회사도 측정값이 아니라고 적었습니다. 형식·정답·보정의 세 층 중 공개 자료가 채운 것은 형식 하나이고, 평가 페이지의 정확도는 다른 모델 둘의 답을 기준으로 삼았습니다.
