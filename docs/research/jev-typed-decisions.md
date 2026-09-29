@@ -334,3 +334,10 @@ TypeSafe 공식 자료에는 **로봇·제조·산업 제어·자율주행 언�
     - AI primer `"Large-scale automation will be dominated by AI-to-AI and AI-to-software interactions, so the machine interface matters more than the chat interface."`
     - AI primer `"RLHF teaches a model to say things that people prefer"` / `confident-sounding hallucinations`
     - Noul 문서 요청·응답 JSON 예시 (`input_tokens: 360`, `output_tokens: 39`)
+15. **⑥ 검증 결과 (2026-09-30)** — 초안 인용을 문자열 검색으로 재확인
+    - 확인: `"~5x more expensive than input tokens."`, `"FREE (too cheap to meter)"`, `"3 to 329 seconds"`, `"70ms-500ms"`, `"Our number is not empirical."`, 첫 System One Model, RLHF 문장·`confident-sounding hallucinations`, `"The model does not generate text. It returns decisions and probabilities."`, 0.8 보정 문장, 입력 형식 문장, Choice 255개 / Score 최대 10단계, 음성 뱅킹 0.6·0.85, 스마트홈 4개 질문, 가드레일 Noul·Score, 스킬 추천 488건 16.8%→7.3%
+    - **고친 것:** `"Generates all outputs in parallel"`은 두 문장을 합친 오인용 → 원문 `"Jev outputs all probabilities in parallel instead of autoregressively generating by token."`
+    - **고친 것:** P(A) + P(not A) = 1 예시는 원문과 다름(Noul과 Choice 형식 간 비교) → 원문 `"structural invariants ... simply aren't guaranteed by the model"` 인용으로 교체
+    - **고친 것:** "설계 가이드의 첫 원칙" → 요약 목록의 첫 항목
+    - **고친 것:** 스킬 추천 지표 정의 → `"the share where the first skill_view call was not the covering skill"`
+    - 스킬 카탈로그 182개는 첫 조사 때만 확인 [S]
